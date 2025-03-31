@@ -83,7 +83,7 @@ const Sidebar = ({ activePage }: SidebarProps) => {
       <div className="mt-auto pt-6 border-t border-gray-200 mt-6">
         <SidebarItem 
           icon={<Settings className="h-5 w-5" />} 
-          title="Setting" 
+          title="Settings" 
           href="/settings" 
           active={activePage === 'settings'} 
         />
