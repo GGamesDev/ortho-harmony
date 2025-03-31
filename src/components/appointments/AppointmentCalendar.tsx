@@ -29,7 +29,7 @@ const AppointmentCalendar = ({ selectedDate, onSelectDate }: AppointmentCalendar
         selected={selectedDate}
         onSelect={onSelectDate}
         className="rounded-md"
-        modifiersClasses={{
+        modifiersClassNames={{
           selected: 'bg-ortho-primary text-white',
           today: 'bg-ortho-light text-ortho-primary'
         }}
@@ -39,8 +39,8 @@ const AppointmentCalendar = ({ selectedDate, onSelectDate }: AppointmentCalendar
             return !!appointmentDates[dateStr];
           }
         }}
-        modifiersStyles={{
-          appointment: { fontWeight: 'bold', backgroundColor: 'var(--ortho-light)', color: 'var(--ortho-primary)' }
+        styles={{
+          day_appointment: { fontWeight: 'bold', backgroundColor: 'var(--ortho-light)', color: 'var(--ortho-primary)' }
         }}
       />
       
