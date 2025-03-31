@@ -19,12 +19,10 @@ const Patients = () => {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar activePage="patients" />
-      
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <Navbar />
-        
+    <div className="flex flex-col flex-1 overflow-hidden">
+      <Navbar />
+        <div className="flex h-screen overflow-hidden">
+          <Sidebar activePage="patients" />
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
