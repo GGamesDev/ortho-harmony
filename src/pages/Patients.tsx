@@ -19,9 +19,9 @@ const Patients = () => {
   );
 
   return (
-    <div className="flex flex-col flex-1 overflow-hidden">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-        <div className="flex h-screen overflow-hidden">
+        <div className="flex">
           <Sidebar activePage="patients" />
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-7xl mx-auto">
