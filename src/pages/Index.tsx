@@ -1,6 +1,5 @@
 
 import React from 'react';
-import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
 import StatsCards from '@/components/dashboard/StatsCards';
 import AppointmentList from '@/components/dashboard/AppointmentList';
@@ -11,7 +10,6 @@ import { patients, appointments, stats } from '@/utils/dummyData';
 const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       <div className="flex">
         <Sidebar activePage="dashboard" />
         <main className="flex-1 p-6 md:p-8">

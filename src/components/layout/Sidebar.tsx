@@ -40,7 +40,7 @@ interface SidebarProps {
 
 const Sidebar = ({ activePage }: SidebarProps) => {
   return (
-    <aside className="hidden md:flex flex-col w-64 border-r border-gray-200 bg-white h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto py-6 px-3">
+    <aside className="hidden md:flex flex-col w-64 border-r border-gray-200 bg-white h-[calc(100vh)] sticky overflow-y-auto py-6 px-3">
       <div className="space-y-1">
         <SidebarItem 
           icon={<Home className="h-5 w-5" />} 

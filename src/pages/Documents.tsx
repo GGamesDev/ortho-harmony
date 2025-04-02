@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -79,7 +78,6 @@ const Documents = () => {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       <div className="flex">
         <Sidebar activePage="documents" />
         

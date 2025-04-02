@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import Navbar from '@/components/layout/Navbar';
 import Sidebar from '@/components/layout/Sidebar';
 import AppointmentCalendar from '@/components/appointments/AppointmentCalendar';
 import { appointments } from '@/utils/dummyData';
@@ -102,24 +101,14 @@ const Appointments = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       <div className="flex">
         <Sidebar activePage="appointments" />
-        <div className="flex-1 p-4 lg:p-6 overflow-hidden">
-          <div className="h-full flex flex-col max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h1 className="text-2xl font-bold">Appointments</h1>
-                <div className="text-sm text-gray-500">
-                  {viewMode === 'day' 
-                    ? format(selectedDate || new Date(), 'EEEE, MMMM d, yyyy')
-                    : `${format(currentWeekStart, 'MMM d')} - ${format(currentWeekEnd, 'MMM d, yyyy')}`}
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="flex items-center bg-white rounded-md p-1 border">
+        <main className="flex-1 p-6">
+          <div className="max-w-7xl mx-auto">
+            <h1 className="text-2xl font-bold text-gray-900 mb-6">Appointments</h1>
+            <div className="space-y-6">
+              <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div className="relative w-full md:w-80">
                   <Button 
                     variant="ghost" 
                     size="sm" 
@@ -137,7 +126,7 @@ const Appointments = () => {
                     Week
                   </Button>
                 </div>
-                
+                <div className="ml-auto">
                 <Button size="icon" variant="ghost" onClick={handlePrevious}>
                   <ChevronLeft className="h-5 w-5" />
                 </Button>
@@ -145,28 +134,19 @@ const Appointments = () => {
                 <Button size="icon" variant="ghost" onClick={handleNext}>
                   <ChevronRight className="h-5 w-5" />
                 </Button>
-                
-                <Button onClick={() => setIsFormOpen(true)}>
+                </div>
+                <div className="ml-auto">
+                <Button className="flex-1 md:flex-none bg-ortho-primary hover:bg-ortho-primary/90" onClick={() => setIsFormOpen(true)}>
                   <Plus className="mr-1 h-4 w-4" /> New Appointment
                 </Button>
+                </div>
               </div>
             </div>
             
             {/* Main Content */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 h-full overflow-hidden">
-              {/* Calendar */}
-              <div className="md:col-span-1 overflow-hidden">
-                <div className="ortho-card h-full">
-                  <h2 className="text-xl font-semibold mb-4">Calendar</h2>
-                  <AppointmentCalendar 
-                    selectedDate={selectedDate} 
-                    onSelectDate={setSelectedDate} 
-                  />
-                </div>
-              </div>
-              
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 h-full overflow-hidden top-3">
               {/* Agenda */}
-              <div className="md:col-span-3 overflow-hidden flex flex-col h-full">
+              <div className="md:col-span-4 overflow-hidden flex flex-col h-full">
                 <Card className="flex-1 overflow-hidden">
                   <CardHeader className="pb-3">
                     <CardTitle>
@@ -265,8 +245,8 @@ const Appointments = () => {
               </div>
             </div>
           </div>
+          </main>
         </div>
-      </div>
       <AppointmentForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
     </div>
   );

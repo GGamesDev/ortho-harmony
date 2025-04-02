@@ -71,6 +71,14 @@ const DocumentDetailsDialog = ({
   };
   
   const handleDownloadDocument = () => {
+    if (!document.assignedPatientId) {
+      toast({
+        title: "Error",
+        description: "Please assign a patient first",
+        variant: "destructive"
+      });
+      return;
+    }
     toast({
       title: "Download started",
       description: `Document "${document.title}" is being downloaded`,
@@ -78,6 +86,14 @@ const DocumentDetailsDialog = ({
   };
   
   const handlePrintDocument = () => {
+    if (!document.assignedPatientId) {
+      toast({
+        title: "Error",
+        description: "Please assign a patient first",
+        variant: "destructive"
+      });
+      return;
+    }
     toast({
       title: "Print job sent",
       description: `Document "${document.title}" has been sent to the printer`,
@@ -98,11 +114,6 @@ const DocumentDetailsDialog = ({
         </DialogHeader>
         
         <div className="grid gap-4 py-4">
-          <div className="text-sm text-gray-500">
-            <p>Created: {format(new Date(document.createdAt), 'MMMM d, yyyy')}</p>
-            <p>Last updated: {format(new Date(document.updatedAt), 'MMMM d, yyyy')}</p>
-          </div>
-          
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="patient" className="text-right">
               Assign Patient
@@ -126,13 +137,6 @@ const DocumentDetailsDialog = ({
             </div>
           </div>
           
-          <Button 
-            onClick={handleAssignPatient} 
-            className="w-full"
-          >
-            {document.assignedPatientId ? 'Reassign Patient' : 'Assign Patient'}
-          </Button>
-          
           <div className="border-t border-gray-200 pt-4">
             <h4 className="text-sm font-medium mb-2">Document Actions</h4>
             <div className="flex justify-between gap-2">
@@ -140,7 +144,6 @@ const DocumentDetailsDialog = ({
                 variant="outline" 
                 className="flex-1"
                 onClick={handleEmailDocument}
-                disabled={!document.assignedPatientId}
               >
                 <Mail className="mr-2 h-4 w-4" />
                 Email
@@ -164,13 +167,6 @@ const DocumentDetailsDialog = ({
             </div>
           </div>
         </div>
-        
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            <X className="mr-2 h-4 w-4" />
-            Close
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
