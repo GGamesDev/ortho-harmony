@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '@/components/layout/Sidebar';
 import { 
   Table, 
@@ -27,7 +28,7 @@ import {
   DialogTitle 
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { FileImage, Search } from 'lucide-react';
+import { Camera, Search } from 'lucide-react';
 import { patients } from '@/utils/dummyData';
 
 interface Radiography {
@@ -84,6 +85,7 @@ const radiographies: Radiography[] = [
 ];
 
 const Radiographies = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedImage, setSelectedImage] = useState<Radiography | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
@@ -103,6 +105,10 @@ const Radiographies = () => {
     return patient ? patient.name : 'Unknown Patient';
   };
 
+  const handleLaunchRadiography = () => {
+    navigate('/start-radiography');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="flex">
@@ -111,9 +117,9 @@ const Radiographies = () => {
           <div className="max-w-6xl mx-auto">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-2xl font-bold text-gray-900">Radiographies</h1>
-              <Button>
-                <FileImage className="mr-2 h-4 w-4" />
-                Upload New Radiography
+              <Button onClick={handleLaunchRadiography}>
+                <Camera className="mr-2 h-4 w-4" />
+                Launch Radiography
               </Button>
             </div>
 
