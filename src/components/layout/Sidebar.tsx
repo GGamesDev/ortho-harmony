@@ -6,9 +6,9 @@ import {
   Users, 
   Calendar, 
   ClipboardList, 
-  BarChart2, 
   Settings,
-  FileText
+  FileText,
+  FileImage
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -73,10 +73,10 @@ const Sidebar = ({ activePage }: SidebarProps) => {
           active={activePage === 'documents'} 
         />
         <SidebarItem 
-          icon={<BarChart2 className="h-5 w-5" />} 
-          title="Reports" 
-          href="/reports" 
-          active={activePage === 'reports'} 
+          icon={<FileImage className="h-5 w-5" />} 
+          title="Radiographies" 
+          href="/radiographies" 
+          active={activePage === 'radiographies'} 
         />
       </div>
       

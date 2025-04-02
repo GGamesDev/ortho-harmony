@@ -1,262 +1,192 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Search, Trash2, UserPlus, Mail, Phone } from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
+// Define the Contact interface
 interface Contact {
   id: string;
   name: string;
   email: string;
-  phone?: string;
-  type: 'doctor' | 'staff' | 'supplier' | 'other';
+  phone: string;
+  type: "doctor" | "staff" | "supplier" | "other";
 }
-
-const contactSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  phone: z.string().optional(),
-  type: z.enum(['doctor', 'staff', 'supplier', 'other']),
-});
-
-type ContactFormValues = z.infer<typeof contactSchema>;
 
 const ContactsSettings = () => {
   const { toast } = useToast();
   const [contacts, setContacts] = useState<Contact[]>([
-    { id: '1', name: 'Dr. John Smith', email: 'john.smith@example.com', phone: '+1 234 567 890', type: 'doctor' },
-    { id: '2', name: 'Jane Doe', email: 'jane.doe@example.com', type: 'staff' },
-    { id: '3', name: 'Medical Supplies Inc.', email: 'orders@medsupplies.com', phone: '+1 987 654 321', type: 'supplier' },
+    { id: '1', name: "Dr. Smith", email: "dr.smith@example.com", phone: "123-456-7890", type: "doctor" },
+    { id: '2', name: "Jane Doe", email: "jane.doe@example.com", phone: "234-567-8901", type: "staff" },
+    { id: '3', name: "Dental Supplies Co", email: "orders@dentalsupplies.com", phone: "345-678-9012", type: "supplier" }
   ]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [filterType, setFilterType] = useState<string | null>(null);
-  
-  const form = useForm<ContactFormValues>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: {
+  const [newContact, setNewContact] = useState<Contact>({
+    id: '',
+    name: '',
+    email: '',
+    phone: '',
+    type: "other"
+  });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState<string>('all');
+
+  const handleAddContact = () => {
+    if (!newContact.name || !newContact.email) {
+      toast({
+        title: "Missing information",
+        description: "Please provide at least a name and email for the contact.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const contactWithId = {
+      ...newContact,
+      id: Date.now().toString()
+    };
+    
+    setContacts([...contacts, contactWithId]);
+    setNewContact({
+      id: '',
       name: '',
       email: '',
       phone: '',
-      type: 'other',
-    },
-  });
-  
-  const onSubmit = (data: ContactFormValues) => {
-    const newContact: Contact = {
-      id: Date.now().toString(),
-      ...data,
-    };
+      type: "other"
+    });
     
-    setContacts([...contacts, newContact]);
-    setDialogOpen(false);
-    form.reset();
     toast({
       title: "Contact added",
-      description: `${newContact.name} has been added to your contacts.`,
+      description: `${contactWithId.name} has been added to your contacts.`
     });
   };
-  
-  const handleDelete = (id: string) => {
-    const contactToDelete = contacts.find(contact => contact.id === id);
-    setContacts(contacts.filter(contact => contact.id !== id));
-    toast({
-      title: "Contact deleted",
-      description: `${contactToDelete?.name} has been removed from your contacts.`,
-    });
-  };
-  
+
   const filteredContacts = contacts.filter(contact => {
-    const matchesQuery = contact.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         contact.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = filterType === null || contact.type === filterType;
+    const matchesSearch = 
+      contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.email.toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesQuery && matchesType;
+    const matchesType = filterType === 'all' || contact.type === filterType;
+    
+    return matchesSearch && matchesType;
   });
-  
-  const contactTypeColors: Record<string, string> = {
-    doctor: 'bg-blue-100 text-blue-800',
-    staff: 'bg-green-100 text-green-800',
-    supplier: 'bg-purple-100 text-purple-800',
-    other: 'bg-gray-100 text-gray-800',
-  };
-  
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Contacts Management</CardTitle>
-        <CardDescription>
-          Manage your contacts for quick access when sending documents.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center justify-between mb-6">
-          <div className="relative w-72">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-            <Input 
-              placeholder="Search contacts..." 
-              className="pl-9"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              {['doctor', 'staff', 'supplier', 'other'].map((type) => (
-                <Badge 
-                  key={type}
-                  variant={filterType === type ? 'default' : 'outline'} 
-                  onClick={() => setFilterType(filterType === type ? null : type)}
-                  className="cursor-pointer capitalize"
-                >
-                  {type}
-                </Badge>
-              ))}
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-medium">Add New Contact</h3>
+        <div className="grid gap-4 mt-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input 
+                id="name" 
+                placeholder="Contact name" 
+                value={newContact.name}
+                onChange={(e) => setNewContact({...newContact, name: e.target.value})}
+              />
             </div>
             
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogTrigger asChild>
-                <Button size="sm" className="flex items-center gap-2">
-                  <UserPlus className="h-4 w-4" />
-                  <span>Add Contact</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Add New Contact</DialogTitle>
-                  <DialogDescription>
-                    Add a new contact to your list. Fill in the details below.
-                  </DialogDescription>
-                </DialogHeader>
-                
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="John Doe" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email Address</FormLabel>
-                          <FormControl>
-                            <Input placeholder="john.doe@example.com" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Phone (optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="+1 234 567 890" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="type"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Contact Type</FormLabel>
-                          <FormControl>
-                            <select 
-                              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                              {...field}
-                            >
-                              <option value="doctor">Doctor</option>
-                              <option value="staff">Staff</option>
-                              <option value="supplier">Supplier</option>
-                              <option value="other">Other</option>
-                            </select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <DialogFooter className="mt-6">
-                      <Button type="submit">Add Contact</Button>
-                    </DialogFooter>
-                  </form>
-                </Form>
-              </DialogContent>
-            </Dialog>
+            <div className="space-y-2">
+              <Label htmlFor="type">Type</Label>
+              <Select 
+                value={newContact.type}
+                onValueChange={(value: any) => setNewContact({...newContact, type: value})}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="doctor">Doctor</SelectItem>
+                  <SelectItem value="staff">Staff</SelectItem>
+                  <SelectItem value="supplier">Supplier</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input 
+                id="email" 
+                type="email" 
+                placeholder="email@example.com" 
+                value={newContact.email}
+                onChange={(e) => setNewContact({...newContact, email: e.target.value})}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone</Label>
+              <Input 
+                id="phone" 
+                placeholder="Phone number" 
+                value={newContact.phone}
+                onChange={(e) => setNewContact({...newContact, phone: e.target.value})}
+              />
+            </div>
+          </div>
+          
+          <Button onClick={handleAddContact}>Add Contact</Button>
+        </div>
+      </div>
+      
+      <div>
+        <h3 className="text-lg font-medium">Manage Contacts</h3>
+        <div className="grid gap-4 mt-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <Input 
+              placeholder="Search contacts..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            
+            <Select 
+              value={filterType}
+              onValueChange={setFilterType}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Filter by type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All contacts</SelectItem>
+                <SelectItem value="doctor">Doctors</SelectItem>
+                <SelectItem value="staff">Staff</SelectItem>
+                <SelectItem value="supplier">Suppliers</SelectItem>
+                <SelectItem value="other">Others</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="border rounded-md">
+            {filteredContacts.length > 0 ? (
+              <div className="divide-y">
+                {filteredContacts.map((contact) => (
+                  <div key={contact.id} className="p-4 flex justify-between items-center">
+                    <div>
+                      <h4 className="font-medium">{contact.name}</h4>
+                      <div className="text-sm text-gray-500">
+                        <p>{contact.email}</p>
+                        <p>{contact.phone}</p>
+                        <span className="inline-block px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800 mt-1">
+                          {contact.type.charAt(0).toUpperCase() + contact.type.slice(1)}
+                        </span>
+                      </div>
+                    </div>
+                    <Button variant="ghost" size="sm">Edit</Button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-4 text-center text-gray-500">No contacts found</div>
+            )}
           </div>
         </div>
-        
-        <div className="space-y-4">
-          {filteredContacts.length === 0 ? (
-            <div className="text-center py-10">
-              <p className="text-gray-500">No contacts found matching your search.</p>
-            </div>
-          ) : (
-            filteredContacts.map((contact) => (
-              <div 
-                key={contact.id}
-                className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
-              >
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-medium">{contact.name}</h4>
-                    <Badge className={`${contactTypeColors[contact.type]} capitalize`}>
-                      {contact.type}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-500 mt-1">
-                    <Mail className="h-3.5 w-3.5 mr-2" />
-                    <span>{contact.email}</span>
-                  </div>
-                  {contact.phone && (
-                    <div className="flex items-center text-sm text-gray-500 mt-1">
-                      <Phone className="h-3.5 w-3.5 mr-2" />
-                      <span>{contact.phone}</span>
-                    </div>
-                  )}
-                </div>
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  onClick={() => handleDelete(contact.id)}
-                >
-                  <Trash2 className="h-4 w-4 text-red-500" />
-                </Button>
-              </div>
-            ))
-          )}
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

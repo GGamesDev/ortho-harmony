@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { Calendar, DateView } from '@/components/ui/calendar';
-import { patients, appointments } from '@/utils/dummyData';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
 
-// Fix the day_appointment error by removing it
+import React, { useState } from 'react';
+import { Calendar } from '@/components/ui/calendar';
+import { patients, appointments } from '@/utils/dummyData';
+import { format } from 'date-fns';
+
 const AppointmentCalendar = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
@@ -37,7 +35,7 @@ const AppointmentCalendar = () => {
           <ul>
             {dayAppointments.map(appointment => (
               <li key={appointment.id} className="py-2">
-                {appointment.title} - {appointment.time}
+                {appointment.patientName} - {appointment.time}
               </li>
             ))}
           </ul>
