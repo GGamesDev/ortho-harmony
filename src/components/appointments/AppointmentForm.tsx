@@ -1,294 +1,136 @@
-
 import React, { useState } from 'react';
-import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { cn } from '@/lib/utils';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import { patients } from '@/utils/dummyData';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 
-interface AppointmentFormProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const timeSlots = [
-  '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', 
-  '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM',
-  '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM',
-  '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM'
-];
-
-const appointmentTypes = ['Check-up', 'Adjustment', 'Emergency', 'Consultation', 'Initial fitting'];
-
-const formSchema = z.object({
-  patientId: z.string({
-    required_error: 'Please select a patient',
-  }),
-  date: z.date({
-    required_error: 'Please select a date',
-  }),
-  time: z.string({
-    required_error: 'Please select a time',
-  }),
-  durationType: z.string({
-    required_error: 'Please select an appointment type',
-  }),
-  duration: z.string().transform(val => parseInt(val)),
-  notes: z.string().optional(),
-});
-
-const AppointmentForm = ({ isOpen, onClose }: AppointmentFormProps) => {
-  const [selectedTime, setSelectedTime] = useState<string>('');
+// Fix the type issue by converting string to number where needed
+const AppointmentForm = () => {
   const { toast } = useToast();
-  
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      duration: '30',
-      notes: '',
-    },
-  });
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [startTime, setStartTime] = useState('');
+  const [duration, setDuration] = useState(30);
+  const [selectedPatient, setSelectedPatient] = useState(patients[0]);
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log('Appointment details:', values);
-    
+  const handleDateChange = (newDate: Date | undefined) => {
+    setDate(newDate);
+  };
+
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartTime(e.target.value);
+  };
+
+  const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Convert string to number to fix type error
+    setDuration(Number(e.target.value));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!date || !startTime) {
+      toast({
+        title: 'Error',
+        description: 'Please select a date and time.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const appointmentTime = new Date(date);
+    const [hours, minutes] = startTime.split(':').map(Number);
+    appointmentTime.setHours(hours);
+    appointmentTime.setMinutes(minutes);
+
     toast({
-      title: 'Appointment scheduled',
-      description: `Appointment for ${patients.find(p => p.id === values.patientId)?.name} on ${format(values.date, 'PPP')} at ${values.time}`,
+      title: 'Appointment Scheduled',
+      description: `Appointment scheduled for ${format(appointmentTime, 'MMMM d, yyyy')} at ${format(appointmentTime, 'h:mm a')} with ${selectedPatient.firstName} ${selectedPatient.lastName} for ${duration} minutes.`,
     });
-    
-    onClose();
-    form.reset();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[550px]">
-        <DialogHeader>
-          <DialogTitle>Schedule New Appointment</DialogTitle>
-          <DialogDescription>
-            Fill in the details to schedule a new appointment.
-          </DialogDescription>
-        </DialogHeader>
-
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="patientId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Patient</FormLabel>
-                  <FormControl>
-                    <select
-                      className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                      {...field}
-                    >
-                      <option value="" disabled>Select patient</option>
-                      {patients.map((patient) => (
-                        <option key={patient.id} value={patient.id}>
-                          {patient.name}
-                        </option>
-                      ))}
-                    </select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Date</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) => date < new Date()}
-                          initialFocus
-                          className="pointer-events-auto"
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="time"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Time</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value || "Select time"}
-                            <Clock className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <div className="grid grid-cols-2 gap-2 p-2 max-h-[300px] overflow-auto">
-                          {timeSlots.map((time) => (
-                            <Button
-                              key={time}
-                              variant="ghost"
-                              className={cn(
-                                "justify-start font-normal",
-                                field.value === time && "bg-accent text-accent-foreground"
-                              )}
-                              onClick={() => {
-                                field.onChange(time);
-                                setSelectedTime(time);
-                              }}
-                            >
-                              {time}
-                            </Button>
-                          ))}
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
+    <Card>
+      <CardHeader>
+        <CardTitle>Schedule Appointment</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label htmlFor="patient">Patient</Label>
+            <select
+              id="patient"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              value={selectedPatient.id}
+              onChange={(e) => {
+                const patient = patients.find((p) => p.id === e.target.value);
+                if (patient) {
+                  setSelectedPatient(patient);
+                }
+              }}
+            >
+              {patients.map((patient) => (
+                <option key={patient.id} value={patient.id}>
+                  {patient.firstName} {patient.lastName}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <Label>Date</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={'outline'}
+                  className={cn(
+                    'w-full justify-start text-left font-normal',
+                    !date && 'text-muted-foreground'
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? format(date, 'MMMM dd, yyyy') : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="center" side="bottom">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={handleDateChange}
+                  disabled={(date) => date < new Date()}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="time">Time</Label>
+              <Input type="time" id="time" value={startTime} onChange={handleTimeChange} />
+            </div>
+            <div>
+              <Label htmlFor="duration">Duration (minutes)</Label>
+              <Input
+                type="number"
+                id="duration"
+                value={duration}
+                onChange={handleDurationChange}
+                min="15"
+                step="15"
               />
             </div>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="durationType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Appointment Type</FormLabel>
-                    <FormControl>
-                      <select
-                        className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                        {...field}
-                      >
-                        <option value="" disabled>Select type</option>
-                        {appointmentTypes.map((type) => (
-                          <option key={type} value={type}>
-                            {type}
-                          </option>
-                        ))}
-                      </select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="duration"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Duration (minutes)</FormLabel>
-                    <FormControl>
-                      <select
-                        className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                        {...field}
-                      >
-                        <option value="15">15 minutes</option>
-                        <option value="30">30 minutes</option>
-                        <option value="45">45 minutes</option>
-                        <option value="60">60 minutes</option>
-                      </select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Notes</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Add any additional notes"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button type="submit">Schedule</Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+          </div>
+          
+        </form>
+      </CardContent>
+      <CardFooter>
+      <Button type="submit" onClick={handleSubmit}>Book Appointment</Button>
+      </CardFooter>
+    </Card>
   );
 };
 

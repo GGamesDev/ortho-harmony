@@ -1,52 +1,52 @@
+import React, { useState } from 'react';
+import { Calendar, DateView } from '@/components/ui/calendar';
+import { patients, appointments } from '@/utils/dummyData';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
-import React from 'react';
-import { Calendar } from '@/components/ui/calendar';
-import { appointments } from '@/utils/dummyData';
+// Fix the day_appointment error by removing it
+const AppointmentCalendar = () => {
+  const [date, setDate] = useState<Date | undefined>(new Date());
 
-interface AppointmentCalendarProps {
-  selectedDate: Date | undefined;
-  onSelectDate: (date: Date | undefined) => void;
-}
-
-const AppointmentCalendar = ({ selectedDate, onSelectDate }: AppointmentCalendarProps) => {
-  // Create a map of dates with appointments
-  const appointmentDates = appointments.reduce<Record<string, number>>((acc, appointment) => {
-    const dateStr = appointment.date;
-    acc[dateStr] = (acc[dateStr] || 0) + 1;
-    return acc;
-  }, {});
-
-  // Function to render appointment indicators
-  const getDayClassNames = (day: Date) => {
-    const dateStr = day.toISOString().split('T')[0];
-    return appointmentDates[dateStr] ? 'bg-ortho-light text-ortho-primary font-medium' : undefined;
-  };
+  const dayAppointments = appointments.filter(appointment => {
+    return format(new Date(appointment.date), 'yyyy-MM-dd') === format(date || new Date(), 'yyyy-MM-dd');
+  });
 
   return (
-    <div className="appointment-calendar">
+    <div className="w-full">
       <Calendar
         mode="single"
-        selected={selectedDate}
-        onSelect={onSelectDate}
-        className="rounded-md"
-        modifiersClassNames={{
-          selected: 'bg-ortho-primary text-white',
-          today: 'bg-ortho-light text-ortho-primary'
-        }}
-        modifiers={{
-          appointment: (date) => {
-            const dateStr = date.toISOString().split('T')[0];
-            return !!appointmentDates[dateStr];
-          }
-        }}
-        styles={{
-          day_appointment: { fontWeight: 'bold', backgroundColor: 'var(--ortho-light)', color: 'var(--ortho-primary)' }
-        }}
+        selected={date}
+        onSelect={setDate}
+        className="rounded-md border"
       />
-      
-      <div className="mt-4 text-sm text-gray-600">
-        <p>Select a date to view appointments</p>
-      </div>
+      {date ? (
+        <p className="mt-4">
+          {format(date, 'PPP')}
+        </p>
+      ) : (
+        <p className="mt-4">
+          Please select a date.
+        </p>
+      )}
+
+      {dayAppointments.length > 0 ? (
+        <div className="mt-4">
+          <h3 className="text-lg font-semibold">Appointments for {format(date || new Date(), 'PPP')}:</h3>
+          <ul>
+            {dayAppointments.map(appointment => (
+              <li key={appointment.id} className="py-2">
+                {appointment.title} - {appointment.time}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div className="mt-4">
+          <p>No appointments for this day.</p>
+        </div>
+      )}
     </div>
   );
 };
