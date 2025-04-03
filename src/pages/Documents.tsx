@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
-import Sidebar from '@/components/layout/Sidebar';
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from '@/components/layout/AppSidebar';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { 
@@ -78,99 +78,101 @@ const Documents = () => {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="flex">
-        <Sidebar activePage="documents" />
-        
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800">Documents</h1>
-                <p className="text-gray-600">Manage and share patient documents</p>
-              </div>
-              
-              <Button className="bg-ortho-primary hover:bg-ortho-primary/90">
-                <FilePlus className="mr-2 h-4 w-4" />
-                Add New Document
-              </Button>
-            </div>
-            
-            <div className="mb-6 flex flex-col md:flex-row gap-4">
-              <div className="relative flex-1">
-                <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Search documents by title or description..."
-                  className="pl-10"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              
-              <div className="flex gap-3">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="flex items-center gap-2">
-                      <Filter className="h-4 w-4" />
-                      <span>Filter</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    {categories.map(category => (
-                      <DropdownMenuCheckboxItem
-                        key={category}
-                        checked={categoryFilter === category}
-                        onCheckedChange={() => 
-                          setCategoryFilter(categoryFilter === category ? '' : category)
-                        }
-                      >
-                        {category}
-                      </DropdownMenuCheckboxItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+      <SidebarProvider>
+        <div className="flex w-full">
+          <AppSidebar activePage="documents" />
+          
+          <div className="flex-1 overflow-y-auto p-6">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-800">Documents</h1>
+                  <p className="text-gray-600">Manage and share patient documents</p>
+                </div>
                 
-                <Select value={sortOrder} onValueChange={setSortOrder}>
-                  <SelectTrigger className="w-[160px]">
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="newest">Newest first</SelectItem>
-                    <SelectItem value="oldest">Oldest first</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Button className="bg-ortho-primary hover:bg-ortho-primary/90">
+                  <FilePlus className="mr-2 h-4 w-4" />
+                  Add New Document
+                </Button>
               </div>
-            </div>
-            
-            {sortedDocuments.length === 0 ? (
-              <div className="text-center py-12 bg-white rounded-lg border">
-                <FileText className="mx-auto h-12 w-12 text-gray-300" />
-                <h3 className="mt-2 text-lg font-medium text-gray-900">No documents found</h3>
-                <p className="mt-1 text-gray-500">
-                  {searchQuery || categoryFilter ? 
-                    'Try adjusting your search or filter criteria.' : 
-                    'Get started by adding a new document.'}
-                </p>
-                <div className="mt-6">
-                  <Button>
-                    <FilePlus className="mr-2 h-4 w-4" />
-                    Add New Document
-                  </Button>
+              
+              <div className="mb-6 flex flex-col md:flex-row gap-4">
+                <div className="relative flex-1">
+                  <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Input
+                    placeholder="Search documents by title or description..."
+                    className="pl-10"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                
+                <div className="flex gap-3">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="flex items-center gap-2">
+                        <Filter className="h-4 w-4" />
+                        <span>Filter</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      {categories.map(category => (
+                        <DropdownMenuCheckboxItem
+                          key={category}
+                          checked={categoryFilter === category}
+                          onCheckedChange={() => 
+                            setCategoryFilter(categoryFilter === category ? '' : category)
+                          }
+                        >
+                          {category}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  
+                  <Select value={sortOrder} onValueChange={setSortOrder}>
+                    <SelectTrigger className="w-[160px]">
+                      <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="newest">Newest first</SelectItem>
+                      <SelectItem value="oldest">Oldest first</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedDocuments.map((document) => (
-                  <DocumentCard 
-                    key={document.id} 
-                    document={document}
-                    onClick={() => handleOpenDocument(document)}
-                  />
-                ))}
-              </div>
-            )}
+              
+              {sortedDocuments.length === 0 ? (
+                <div className="text-center py-12 bg-white rounded-lg border">
+                  <FileText className="mx-auto h-12 w-12 text-gray-300" />
+                  <h3 className="mt-2 text-lg font-medium text-gray-900">No documents found</h3>
+                  <p className="mt-1 text-gray-500">
+                    {searchQuery || categoryFilter ? 
+                      'Try adjusting your search or filter criteria.' : 
+                      'Get started by adding a new document.'}
+                  </p>
+                  <div className="mt-6">
+                    <Button>
+                      <FilePlus className="mr-2 h-4 w-4" />
+                      Add New Document
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {sortedDocuments.map((document) => (
+                    <DocumentCard 
+                      key={document.id} 
+                      document={document}
+                      onClick={() => handleOpenDocument(document)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </SidebarProvider>
       
       <DocumentDetailsDialog 
         document={selectedDocument}

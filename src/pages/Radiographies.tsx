@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '@/components/layout/Sidebar';
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from '@/components/layout/AppSidebar';
 import { 
   Table, 
   TableBody, 
@@ -111,84 +111,86 @@ const Radiographies = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="flex">
-        <Sidebar activePage="radiographies" />
-        <main className="flex-1 p-6">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold text-gray-900">Radiographies</h1>
-              <Button onClick={handleLaunchRadiography}>
-                <Camera className="mr-2 h-4 w-4" />
-                Launch Radiography
-              </Button>
-            </div>
+      <SidebarProvider>
+        <div className="flex w-full">
+          <AppSidebar activePage="radiographies" />
+          <main className="flex-1 p-6 overflow-y-auto">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-bold text-gray-900">Radiographies</h1>
+                <Button onClick={handleLaunchRadiography}>
+                  <Camera className="mr-2 h-4 w-4" />
+                  Launch Radiography
+                </Button>
+              </div>
 
-            <Card className="mb-6">
-              <CardContent className="pt-6">
-                <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                  <Input
-                    type="search"
-                    placeholder="Search radiographies by type or patient name..."
-                    className="pl-8"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+              <Card className="mb-6">
+                <CardContent className="pt-6">
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                    <Input
+                      type="search"
+                      placeholder="Search radiographies by type or patient name..."
+                      className="pl-8"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Radiography Records</CardTitle>
-                <CardDescription>
-                  Browse and manage patient radiographic images
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Patient</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Notes</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredRadiographies.length > 0 ? (
-                      filteredRadiographies.map((rad) => (
-                        <TableRow key={rad.id}>
-                          <TableCell>{rad.date}</TableCell>
-                          <TableCell>{getPatientName(rad.patientId)}</TableCell>
-                          <TableCell>{rad.type}</TableCell>
-                          <TableCell className="max-w-xs truncate">{rad.notes}</TableCell>
-                          <TableCell className="text-right">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleViewImage(rad)}
-                            >
-                              View
-                            </Button>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Radiography Records</CardTitle>
+                  <CardDescription>
+                    Browse and manage patient radiographic images
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Patient</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Notes</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredRadiographies.length > 0 ? (
+                        filteredRadiographies.map((rad) => (
+                          <TableRow key={rad.id}>
+                            <TableCell>{rad.date}</TableCell>
+                            <TableCell>{getPatientName(rad.patientId)}</TableCell>
+                            <TableCell>{rad.type}</TableCell>
+                            <TableCell className="max-w-xs truncate">{rad.notes}</TableCell>
+                            <TableCell className="text-right">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleViewImage(rad)}
+                              >
+                                View
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={5} className="h-24 text-center">
+                            No radiographies found
                           </TableCell>
                         </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={5} className="h-24 text-center">
-                          No radiographies found
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
-      </div>
+                      )}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+          </main>
+        </div>
+      </SidebarProvider>
 
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
         <DialogContent className="sm:max-w-lg">
