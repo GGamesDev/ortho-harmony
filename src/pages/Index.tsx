@@ -12,7 +12,7 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="flex">
         <Sidebar activePage="dashboard" />
-        <main className="flex-1 p-6 md:p-8">
+        <main className="flex-1 p-6 md:p-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
             <header className="mb-8">
               <h1 className="font-semibold text-gray-900">Dashboard</h1>
