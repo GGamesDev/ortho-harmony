@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Users, Calendar, Activity, DollarSign } from 'lucide-react';
 import { StatsData } from '@/utils/dummyData';
@@ -35,25 +34,25 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <StatsCard 
-        title="New Patients" 
+        title="Nouveaux patients" 
         value={stats.newPatients} 
         icon={<Users className="h-6 w-6 text-white" />}
         color="bg-blue-500"
       />
       <StatsCard 
-        title="Appointments" 
+        title="Rendez-vous" 
         value={stats.appointments} 
         icon={<Calendar className="h-6 w-6 text-white" />}
         color="bg-green-500"
       />
       <StatsCard 
-        title="Active Treatments" 
+        title="Traitements actifs" 
         value={stats.treatments} 
         icon={<Activity className="h-6 w-6 text-white" />}
         color="bg-purple-500"
       />
       <StatsCard 
-        title="Monthly Revenue" 
+        title="Revenu mensuel" 
         value={`$${stats.revenue.toLocaleString()}`} 
         icon={<DollarSign className="h-6 w-6 text-white" />}
         color="bg-yellow-500"
