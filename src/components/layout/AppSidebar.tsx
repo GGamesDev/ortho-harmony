@@ -66,7 +66,7 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
     <Sidebar>
       <SidebarHeader className="pb-0">
         <div className="px-2 py-2">
-          <h2 className="text-lg font-semibold text-ortho-primary">OrthoHarmony</h2>
+          <h2 className="text-lg font-semibold text-ortho-primary">OrthoBE</h2>
         </div>
       </SidebarHeader>
       <SidebarContent>
