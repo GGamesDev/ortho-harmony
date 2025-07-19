@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Dialog,
@@ -23,17 +22,17 @@ const PatientDetails = ({ patient, isOpen, onClose }: PatientDetailsProps) => {
   
   const handleEditPatient = () => {
     toast({
-      title: "Edit Patient",
-      description: `Opening edit form for ${patient.name}`,
+      title: "Modifier le patient",
+      description: `Ouverture du formulaire d'édition pour ${patient.name}`,
     });
-    // In a real app, this would open an edit form or navigate to edit page
+    // Dans une vraie application, ceci ouvrirait un formulaire d'édition ou naviguerait vers la page d'édition
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold">Patient Details</DialogTitle>
+          <DialogTitle className="text-2xl font-semibold">Détails du patient</DialogTitle>
         </DialogHeader>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
@@ -44,7 +43,7 @@ const PatientDetails = ({ patient, isOpen, onClose }: PatientDetailsProps) => {
               </div>
               <h2 className="text-xl font-medium">{patient.name}</h2>
               <p className="text-gray-600">
-                {patient.age} years • {patient.gender}
+                {patient.age} ans • {patient.gender === 'male' ? 'Homme' : patient.gender === 'female' ? 'Femme' : patient.gender}
               </p>
               
               <div className="w-full mt-6 space-y-4">
@@ -65,27 +64,27 @@ const PatientDetails = ({ patient, isOpen, onClose }: PatientDetailsProps) => {
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-medium flex items-center">
                   <Clipboard className="h-5 w-5 mr-2 text-ortho-primary" />
-                  Treatment Information
+                  Informations sur le traitement
                 </h3>
               </div>
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between mb-1">
-                    <span>Treatment Progress</span>
+                    <span>Progression du traitement</span>
                     <span className="font-medium">{patient.treatmentProgress}%</span>
                   </div>
                   <Progress value={patient.treatmentProgress} className="h-2" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-600">Treatment Type</p>
+                    <p className="text-sm text-gray-600">Type de traitement</p>
                     <p className="font-medium">{patient.treatmentType}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Next Appointment</p>
+                    <p className="text-sm text-gray-600">Prochain rendez-vous</p>
                     <p className="font-medium flex items-center">
                       <Calendar className="h-4 w-4 mr-2 text-ortho-primary" />
-                      {new Date(patient.nextAppointment).toLocaleDateString()}
+                      {new Date(patient.nextAppointment).toLocaleDateString('fr-FR')}
                     </p>
                   </div>
                 </div>
@@ -96,19 +95,19 @@ const PatientDetails = ({ patient, isOpen, onClose }: PatientDetailsProps) => {
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-medium flex items-center">
                   <Clock className="h-5 w-5 mr-2 text-ortho-primary" />
-                  Recent Appointments
+                  Rendez-vous récents
                 </h3>
               </div>
               <p className="text-gray-600">
-                No recent appointments available.
+                Aucun rendez-vous récent disponible.
               </p>
             </div>
           </div>
         </div>
         
         <div className="flex justify-end space-x-3 mt-6">
-          <Button variant="outline" onClick={onClose}>Close</Button>
-          <Button onClick={handleEditPatient}>Edit Patient</Button>
+          <Button variant="outline" onClick={onClose}>Fermer</Button>
+          <Button onClick={handleEditPatient}>Modifier le patient</Button>
         </div>
       </DialogContent>
     </Dialog>
