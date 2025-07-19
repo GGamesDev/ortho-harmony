@@ -1,4 +1,3 @@
-
 import { 
   Home, 
   Users, 
@@ -17,7 +16,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider
 } from "@/components/ui/sidebar";
 
 interface AppSidebarProps {
@@ -27,7 +25,7 @@ interface AppSidebarProps {
 export function AppSidebar({ activePage }: AppSidebarProps) {
   const menuItems = [
     {
-      title: "Dashboard",
+      title: "Tableau de bord",
       href: "/",
       icon: Home,
       active: activePage === "dashboard",
@@ -39,13 +37,13 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
       active: activePage === "patients",
     },
     {
-      title: "Appointments",
+      title: "Rendez-vous",
       href: "/appointments",
       icon: Calendar,
       active: activePage === "appointments",
     },
     {
-      title: "Treatment Plans",
+      title: "Plans de traitement",
       href: "/treatments",
       icon: ClipboardList,
       active: activePage === "treatments",
@@ -78,7 +76,7 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
               <SidebarMenuButton
                 asChild
                 isActive={item.active}
-                tooltip={item.title}
+                tooltip={item.title} // tooltip en français aussi
               >
                 <Link to={item.href}>
                   <item.icon className="h-5 w-5" />
@@ -95,11 +93,11 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
             <SidebarMenuButton
               asChild
               isActive={activePage === "settings"}
-              tooltip="Settings"
+              tooltip="Paramètres"
             >
               <Link to="/settings">
                 <Settings className="h-5 w-5" />
-                <span>Settings</span>
+                <span>Paramètres</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
