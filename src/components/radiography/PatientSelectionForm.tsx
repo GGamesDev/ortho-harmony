@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Card,
@@ -24,9 +23,9 @@ import { ArrowRight } from 'lucide-react';
 import PatientSearch from '@/components/ui/patient-search';
 
 export const radiographyTypes = [
-  { id: 'panoramic', name: 'Panoramic' },
-  { id: 'cephalometric', name: 'Cephalometric' },
-  { id: 'periapical', name: 'Periapical' },
+  { id: 'panoramic', name: 'Panoramique' },
+  { id: 'cephalometric', name: 'Céphalométrique' },
+  { id: 'periapical', name: 'Périapicale' },
   { id: 'bitewing', name: 'Bitewing' },
   { id: 'cbct', name: 'CBCT (Cone Beam CT)' },
 ];
@@ -53,25 +52,25 @@ const PatientSelectionForm: React.FC<PatientSelectionFormProps> = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Patient Information</CardTitle>
+        <CardTitle>Informations sur le patient</CardTitle>
         <CardDescription>
-          Select patient and radiography details
+          Sélectionnez le patient et les détails de la radiographie
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <PatientSearch 
           value={selectedPatient}
           onChange={setSelectedPatient}
-          placeholder="Search for a patient..."
+          placeholder="Rechercher un patient..."
           label="Patient"
           id="patient"
         />
         
         <div className="space-y-2">
-          <Label htmlFor="type">Radiography Type</Label>
+          <Label htmlFor="type">Type de radiographie</Label>
           <Select value={radiographyType} onValueChange={setRadiographyType}>
             <SelectTrigger id="type">
-              <SelectValue placeholder="Select type" />
+              <SelectValue placeholder="Sélectionner un type" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -90,7 +89,7 @@ const PatientSelectionForm: React.FC<PatientSelectionFormProps> = ({
           <Label htmlFor="notes">Notes</Label>
           <Textarea 
             id="notes" 
-            placeholder="Add notes about this radiography..."
+            placeholder="Ajouter des notes concernant cette radiographie..."
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={4}
@@ -103,7 +102,7 @@ const PatientSelectionForm: React.FC<PatientSelectionFormProps> = ({
           onClick={onNextStep}
           disabled={!selectedPatient || !radiographyType}
         >
-          Next Step
+          Étape suivante
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </CardFooter>
