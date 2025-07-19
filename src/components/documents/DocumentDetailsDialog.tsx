@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Dialog, 
@@ -38,8 +37,8 @@ const DocumentDetailsDialog = ({
   const handleAssignPatient = () => {
     if (!selectedPatientId) {
       toast({
-        title: "Error",
-        description: "Please select a patient",
+        title: "Erreur",
+        description: "Veuillez sélectionner un patient",
         variant: "destructive"
       });
       return;
@@ -49,8 +48,8 @@ const DocumentDetailsDialog = ({
     if (patient) {
       onAssignPatient(document.id, patient.id, patient.name);
       toast({
-        title: "Success",
-        description: `Document assigned to ${patient.name}`,
+        title: "Succès",
+        description: `Document attribué à ${patient.name}`,
       });
     }
   };
@@ -58,45 +57,45 @@ const DocumentDetailsDialog = ({
   const handleEmailDocument = () => {
     if (!document.assignedPatientId) {
       toast({
-        title: "Error",
-        description: "Please assign a patient first",
+        title: "Erreur",
+        description: "Veuillez d'abord attribuer un patient",
         variant: "destructive"
       });
       return;
     }
     toast({
-      title: "Email sent",
-      description: `Document "${document.title}" has been emailed to the patient`,
+      title: "Email envoyé",
+      description: `Le document "${document.title}" a été envoyé par email au patient`,
     });
   };
   
   const handleDownloadDocument = () => {
     if (!document.assignedPatientId) {
       toast({
-        title: "Error",
-        description: "Please assign a patient first",
+        title: "Erreur",
+        description: "Veuillez d'abord attribuer un patient",
         variant: "destructive"
       });
       return;
     }
     toast({
-      title: "Download started",
-      description: `Document "${document.title}" is being downloaded`,
+      title: "Téléchargement démarré",
+      description: `Le document "${document.title}" est en cours de téléchargement`,
     });
   };
   
   const handlePrintDocument = () => {
     if (!document.assignedPatientId) {
       toast({
-        title: "Error",
-        description: "Please assign a patient first",
+        title: "Erreur",
+        description: "Veuillez d'abord attribuer un patient",
         variant: "destructive"
       });
       return;
     }
     toast({
-      title: "Print job sent",
-      description: `Document "${document.title}" has been sent to the printer`,
+      title: "Impression lancée",
+      description: `Le document "${document.title}" a été envoyé à l'imprimante`,
     });
   };
   
@@ -118,8 +117,8 @@ const DocumentDetailsDialog = ({
             <PatientSearch 
               value={selectedPatientId}
               onChange={setSelectedPatientId}
-              placeholder="Search for a patient to assign..."
-              label="Assign Patient"
+              placeholder="Recherchez un patient à attribuer..."
+              label="Attribuer un patient"
               id="patient"
             />
             <Button 
@@ -127,12 +126,12 @@ const DocumentDetailsDialog = ({
               className="w-full"
               disabled={!selectedPatientId}
             >
-              Assign Patient
+              Attribuer un patient
             </Button>
           </div>
           
           <div className="border-t border-gray-200 pt-4">
-            <h4 className="text-sm font-medium mb-2">Document Actions</h4>
+            <h4 className="text-sm font-medium mb-2">Actions sur le document</h4>
             <div className="flex justify-between gap-2">
               <Button 
                 variant="outline" 
@@ -140,7 +139,7 @@ const DocumentDetailsDialog = ({
                 onClick={handleEmailDocument}
               >
                 <Mail className="mr-2 h-4 w-4" />
-                Email
+                Envoyer par email
               </Button>
               <Button 
                 variant="outline" 
@@ -148,7 +147,7 @@ const DocumentDetailsDialog = ({
                 onClick={handleDownloadDocument}
               >
                 <Download className="mr-2 h-4 w-4" />
-                Download
+                Télécharger
               </Button>
               <Button 
                 variant="outline" 
@@ -156,7 +155,7 @@ const DocumentDetailsDialog = ({
                 onClick={handlePrintDocument}
               >
                 <Printer className="mr-2 h-4 w-4" />
-                Print
+                Imprimer
               </Button>
             </div>
           </div>
