@@ -93,41 +93,45 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
 
       <SidebarContent className="flex-1 px-2">
         <SidebarMenu>
-          {menuItems.map((item) => (
-            <SidebarMenuItem
-              key={item.title}
-              className={cn(
-                "flex",
-                isOpen ? "justify-start" : "justify-center"
-              )}
-            >
-              <SidebarMenuButton
-                asChild
-                isActive={item.active}
-                tooltip={item.title}
-                className={cn(
-                  "group flex items-center gap-3 px-4 py-2 rounded-xl transition-colors hover:bg-ortho-light/70 text-sm font-medium",
-                  item.active
-                    ? "bg-ortho-primary text-white shadow"
-                    : "text-gray-700 hover:text-ortho-primary"
-                )}
-              >
-                <Link to={item.href}>
-                  <item.icon
-                    className={cn(
-                      isOpen ? "h-5 w-5" : "h-6 w-6",
-                      item.active
-                        ? "text-white"
-                        : "text-ortho-primary group-hover:text-ortho-primary"
-                    )}
-                  />
-                  {isOpen && (
-                    <span className="whitespace-nowrap">{item.title}</span>
-                  )}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+{menuItems.map((item) => (
+  <SidebarMenuItem
+    key={item.title}
+    className={cn("flex", isOpen ? "justify-start" : "justify-center")}
+  >
+    <SidebarMenuButton
+      asChild
+      isActive={item.active}
+      tooltip={item.title}
+      className={cn(
+        "group flex items-center gap-3 rounded-xl transition-colors text-sm font-medium w-full",
+        isOpen ? "justify-start px-4 py-2" : "justify-center h-12",
+        item.active
+          ? "bg-ortho-primary text-white shadow"
+          : "text-gray-700 hover:text-ortho-primary"
+      )}
+    >
+      <Link
+        to={item.href}
+        onClick={() => {
+          if (!isOpen) setIsOpen(true);
+        }}
+        className="flex items-center gap-3 w-full"
+      >
+        <item.icon
+          className={cn(
+            isOpen ? "h-5 w-5" : "h-7 w-7",
+            item.active
+              ? "text-white"
+              : "text-ortho-primary group-hover:text-ortho-primary"
+          )}
+        />
+        {isOpen && (
+          <span className="whitespace-nowrap">{item.title}</span>
+        )}
+      </Link>
+    </SidebarMenuButton>
+  </SidebarMenuItem>
+))}
         </SidebarMenu>
       </SidebarContent>
 
