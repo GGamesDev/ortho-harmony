@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';  // importer la locale française
 import { FileText, Clock, User } from 'lucide-react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Document } from '@/utils/documentData';
@@ -20,7 +20,8 @@ const DocumentCard = ({ document, onClick }: DocumentCardProps) => {
     'Other': 'bg-gray-100 text-gray-800',
   };
   
-  const formattedDate = format(new Date(document.updatedAt), 'MMM d, yyyy');
+  // Format de date français, par exemple "10 juil. 2025"
+  const formattedDate = format(new Date(document.updatedAt), 'd MMM yyyy', { locale: fr });
   
   return (
     <Card onClick={onClick} className="cursor-pointer hover:shadow-md transition-shadow">
@@ -36,7 +37,11 @@ const DocumentCard = ({ document, onClick }: DocumentCardProps) => {
             </div>
           </div>
           <Badge className={categoryColors[document.category]}>
-            {document.category}
+            {document.category === 'Consent' ? 'Consentement' :
+             document.category === 'Treatment' ? 'Traitement' :
+             document.category === 'Medical' ? 'Médical' :
+             document.category === 'Financial' ? 'Financier' :
+             'Autre'}
           </Badge>
         </div>
       </CardContent>
