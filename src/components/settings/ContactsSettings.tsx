@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from '@/hooks/use-toast';
 
-// Define the Contact interface
 interface Contact {
   id: string;
   name: string;
@@ -35,8 +33,8 @@ const ContactsSettings = () => {
   const handleAddContact = () => {
     if (!newContact.name || !newContact.email) {
       toast({
-        title: "Missing information",
-        description: "Please provide at least a name and email for the contact.",
+        title: "Informations manquantes",
+        description: "Merci de fournir au moins un nom et un email pour le contact.",
         variant: "destructive"
       });
       return;
@@ -57,8 +55,8 @@ const ContactsSettings = () => {
     });
     
     toast({
-      title: "Contact added",
-      description: `${contactWithId.name} has been added to your contacts.`
+      title: "Contact ajouté",
+      description: `${contactWithId.name} a été ajouté à vos contacts.`
     });
   };
 
@@ -75,14 +73,14 @@ const ContactsSettings = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Add New Contact</h3>
+        <h3 className="text-lg font-medium">Ajouter un nouveau contact</h3>
         <div className="grid gap-4 mt-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">Nom</Label>
               <Input 
                 id="name" 
-                placeholder="Contact name" 
+                placeholder="Nom du contact" 
                 value={newContact.name}
                 onChange={(e) => setNewContact({...newContact, name: e.target.value})}
               />
@@ -95,13 +93,13 @@ const ContactsSettings = () => {
                 onValueChange={(value: any) => setNewContact({...newContact, type: value})}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue placeholder="Sélectionnez un type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="doctor">Doctor</SelectItem>
-                  <SelectItem value="staff">Staff</SelectItem>
-                  <SelectItem value="supplier">Supplier</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="doctor">Médecin</SelectItem>
+                  <SelectItem value="staff">Personnel</SelectItem>
+                  <SelectItem value="supplier">Fournisseur</SelectItem>
+                  <SelectItem value="other">Autre</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -120,26 +118,26 @@ const ContactsSettings = () => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone</Label>
+              <Label htmlFor="phone">Téléphone</Label>
               <Input 
                 id="phone" 
-                placeholder="Phone number" 
+                placeholder="Numéro de téléphone" 
                 value={newContact.phone}
                 onChange={(e) => setNewContact({...newContact, phone: e.target.value})}
               />
             </div>
           </div>
           
-          <Button onClick={handleAddContact}>Add Contact</Button>
+          <Button onClick={handleAddContact}>Ajouter le contact</Button>
         </div>
       </div>
       
       <div>
-        <h3 className="text-lg font-medium">Manage Contacts</h3>
+        <h3 className="text-lg font-medium">Gérer les contacts</h3>
         <div className="grid gap-4 mt-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Input 
-              placeholder="Search contacts..." 
+              placeholder="Rechercher un contact..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -149,14 +147,14 @@ const ContactsSettings = () => {
               onValueChange={setFilterType}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Filter by type" />
+                <SelectValue placeholder="Filtrer par type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All contacts</SelectItem>
-                <SelectItem value="doctor">Doctors</SelectItem>
-                <SelectItem value="staff">Staff</SelectItem>
-                <SelectItem value="supplier">Suppliers</SelectItem>
-                <SelectItem value="other">Others</SelectItem>
+                <SelectItem value="all">Tous les contacts</SelectItem>
+                <SelectItem value="doctor">Médecins</SelectItem>
+                <SelectItem value="staff">Personnel</SelectItem>
+                <SelectItem value="supplier">Fournisseurs</SelectItem>
+                <SelectItem value="other">Autres</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -176,12 +174,12 @@ const ContactsSettings = () => {
                         </span>
                       </div>
                     </div>
-                    <Button variant="ghost" size="sm">Edit</Button>
+                    <Button variant="ghost" size="sm">Modifier</Button>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="p-4 text-center text-gray-500">No contacts found</div>
+              <div className="p-4 text-center text-gray-500">Aucun contact trouvé</div>
             )}
           </div>
         </div>
