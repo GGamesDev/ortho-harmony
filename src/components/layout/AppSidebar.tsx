@@ -113,13 +113,13 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
       <Link
         to={item.href}
         onClick={() => {
-          if (!isOpen) setIsOpen(true);
+          if (!isOpen) setIsOpen(false);
         }}
         className="flex items-center gap-3 w-full"
       >
         <item.icon
           className={cn(
-            isOpen ? "h-5 w-5" : "h-7 w-7",
+            isOpen ? "h-5 w-5" : "h-10 w-10",
             item.active
               ? "text-white"
               : "text-ortho-primary group-hover:text-ortho-primary"
