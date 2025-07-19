@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { patients } from '@/utils/dummyData';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
+import { format, isBefore, startOfDay } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -35,32 +35,59 @@ const AppointmentForm = ({ isOpen, onClose }: AppointmentFormProps) => {
   };
 
   const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Convert string to number to fix type error
-    setDuration(Number(e.target.value));
+    const val = Number(e.target.value);
+    if (val >= 15) {
+      setDuration(val);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!date || !startTime || !selectedPatient || !appointmentType) {
       toast({
-        title: 'Error',
-        description: 'Please fill in all required fields.',
+        title: 'Erreur',
+        description: 'Veuillez remplir tous les champs obligatoires.',
         variant: 'destructive',
       });
       return;
     }
 
     const selectedPatientData = patients.find(p => p.id === selectedPatient);
+    if (!selectedPatientData) {
+      toast({
+        title: 'Erreur',
+        description: 'Patient non trouvé.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     const appointmentTime = new Date(date);
     const [hours, minutes] = startTime.split(':').map(Number);
+    if (
+      isNaN(hours) ||
+      isNaN(minutes) ||
+      hours < 0 ||
+      hours > 23 ||
+      minutes < 0 ||
+      minutes > 59
+    ) {
+      toast({
+        title: 'Erreur',
+        description: 'Heure invalide.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     appointmentTime.setHours(hours);
     appointmentTime.setMinutes(minutes);
 
     toast({
-      title: 'Appointment Scheduled',
-      description: `Appointment scheduled for ${format(appointmentTime, 'MMMM d, yyyy')} at ${format(appointmentTime, 'h:mm a')} with ${selectedPatientData?.name} for ${duration} minutes.`,
+      title: 'Rendez-vous planifié',
+      description: `Rendez-vous prévu le ${format(appointmentTime, 'dd MMMM yyyy')} à ${format(appointmentTime, 'HH:mm')} avec ${selectedPatientData.name} pour ${duration} minutes.`,
     });
-    
+
     // Reset form and close
     setDate(new Date());
     setStartTime('');
@@ -70,87 +97,94 @@ const AppointmentForm = ({ isOpen, onClose }: AppointmentFormProps) => {
     onClose();
   };
 
+  // Fonction pour désactiver les dates passées (au jour près)
+  const isDateDisabled = (day: Date) => {
+    return isBefore(startOfDay(day), startOfDay(new Date()));
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Schedule New Appointment</DialogTitle>
+          <DialogTitle>Planifier un nouveau rendez-vous</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
-            <PatientSearch 
+            <PatientSearch
               value={selectedPatient}
               onChange={setSelectedPatient}
-              placeholder="Search patient by name, email, or phone..."
+              placeholder="Rechercher un patient par nom, email ou téléphone..."
               label="Patient *"
               id="patient-search"
             />
-            
+
             <div>
-              <Label htmlFor="appointment-type">Appointment Type *</Label>
+              <Label htmlFor="appointment-type">Type de rendez-vous *</Label>
               <Select value={appointmentType} onValueChange={setAppointmentType}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select appointment type" />
+                  <SelectValue placeholder="Sélectionner le type de rendez-vous" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="consultation">Consultation</SelectItem>
-                  <SelectItem value="adjustment">Adjustment</SelectItem>
-                  <SelectItem value="emergency">Emergency</SelectItem>
-                  <SelectItem value="checkup">Regular Checkup</SelectItem>
-                  <SelectItem value="treatment">Treatment Session</SelectItem>
+                  <SelectItem value="adjustment">Ajustement</SelectItem>
+                  <SelectItem value="emergency">Urgence</SelectItem>
+                  <SelectItem value="checkup">Contrôle régulier</SelectItem>
+                  <SelectItem value="treatment">Session de traitement</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-          <div>
-            <Label>Date</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={'outline'}
-                  className={cn(
-                    'w-full justify-start text-left font-normal',
-                    !date && 'text-muted-foreground'
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, 'MMMM dd, yyyy') : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="center" side="bottom">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={handleDateChange}
-                  disabled={(date) => date < new Date()}
-                  initialFocus
+
+            <div>
+              <Label>Date</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={'outline'}
+                    className={cn(
+                      'w-full justify-start text-left font-normal',
+                      !date && 'text-muted-foreground'
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, 'dd MMMM yyyy') : <span>Choisir une date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="center" side="bottom">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={handleDateChange}
+                    disabled={isDateDisabled}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="time">Heure</Label>
+                <Input type="time" id="time" value={startTime} onChange={handleTimeChange} />
+              </div>
+              <div>
+                <Label htmlFor="duration">Durée (minutes)</Label>
+                <Input
+                  type="number"
+                  id="duration"
+                  value={duration}
+                  onChange={handleDurationChange}
+                  min={15}
+                  step={15}
                 />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="time">Time</Label>
-              <Input type="time" id="time" value={startTime} onChange={handleTimeChange} />
-            </div>
-            <div>
-              <Label htmlFor="duration">Duration (minutes)</Label>
-              <Input
-                type="number"
-                id="duration"
-                value={duration}
-                onChange={handleDurationChange}
-                min="15"
-                step="15"
-              />
+              </div>
             </div>
           </div>
-          </div>
-          
+
           <div className="flex justify-end space-x-3">
             <Button type="button" variant="outline" onClick={onClose}>
-              Cancel
+              Annuler
             </Button>
-            <Button type="submit">Book Appointment</Button>
+            <Button type="submit">Réserver</Button>
           </div>
         </form>
       </DialogContent>
