@@ -1,9 +1,7 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -11,11 +9,11 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const emailSettingsSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-  smtpServer: z.string().min(1, { message: "SMTP server is required" }),
+  email: z.string().email({ message: "Veuillez entrer une adresse email valide" }),
+  password: z.string().min(6, { message: "Le mot de passe doit comporter au moins 6 caractères" }),
+  smtpServer: z.string().min(1, { message: "Le serveur SMTP est requis" }),
   smtpPort: z.string().refine((val) => !isNaN(parseInt(val)), {
-    message: "Port must be a valid number",
+    message: "Le port doit être un nombre valide",
   }),
 });
 
@@ -40,8 +38,8 @@ const EmailSettings = () => {
   const onSubmit = (data: EmailSettingsFormValues) => {
     console.log(data);
     toast({
-      title: "Email settings saved",
-      description: `Email configuration for ${data.email} has been saved.`,
+      title: "Paramètres enregistrés",
+      description: `La configuration pour ${data.email} a été enregistrée.`,
     });
   };
   
@@ -49,18 +47,18 @@ const EmailSettings = () => {
     setTestingConnection(true);
     const values = form.getValues();
     
-    // Simulate testing connection
+    // Simule le test de connexion
     setTimeout(() => {
       setTestingConnection(false);
       if (values.email && values.password && values.smtpServer) {
         toast({
-          title: "Connection successful",
-          description: "Email server connection test passed successfully.",
+          title: "Connexion réussie",
+          description: "Le test de connexion au serveur email a réussi.",
         });
       } else {
         toast({
-          title: "Connection failed",
-          description: "Please fill in all required fields.",
+          title: "Échec de la connexion",
+          description: "Veuillez remplir tous les champs requis.",
           variant: "destructive",
         });
       }
@@ -70,9 +68,9 @@ const EmailSettings = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Email Configuration</CardTitle>
+        <CardTitle>Configuration de l'email</CardTitle>
         <CardDescription>
-          Configure your email settings for sending documents to patients.
+          Configurez vos paramètres email pour envoyer des documents aux patients.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -83,9 +81,9 @@ const EmailSettings = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address</FormLabel>
+                  <FormLabel>Adresse email</FormLabel>
                   <FormControl>
-                    <Input placeholder="your.email@example.com" {...field} />
+                    <Input placeholder="votre.email@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -97,12 +95,12 @@ const EmailSettings = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Mot de passe</FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="••••••••" {...field} />
                   </FormControl>
                   <FormDescription>
-                    For Gmail, you may need to use an app password.
+                    Pour Gmail, vous devrez peut-être utiliser un mot de passe d'application.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -115,7 +113,7 @@ const EmailSettings = () => {
                 name="smtpServer"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>SMTP Server</FormLabel>
+                    <FormLabel>Serveur SMTP</FormLabel>
                     <FormControl>
                       <Input placeholder="smtp.example.com" {...field} />
                     </FormControl>
@@ -129,7 +127,7 @@ const EmailSettings = () => {
                 name="smtpPort"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>SMTP Port</FormLabel>
+                    <FormLabel>Port SMTP</FormLabel>
                     <FormControl>
                       <Input placeholder="587" {...field} />
                     </FormControl>
@@ -146,9 +144,9 @@ const EmailSettings = () => {
                 onClick={handleTestConnection}
                 disabled={testingConnection}
               >
-                {testingConnection ? "Testing..." : "Test Connection"}
+                {testingConnection ? "Test en cours..." : "Tester la connexion"}
               </Button>
-              <Button type="submit">Save Settings</Button>
+              <Button type="submit">Enregistrer</Button>
             </div>
           </form>
         </Form>
