@@ -19,8 +19,8 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { patients } from '@/utils/dummyData';
 import { useToast } from '@/hooks/use-toast';
+import PatientSearch from '@/components/ui/patient-search';
 
 interface NewTreatmentDialogProps {
   open: boolean;
@@ -31,19 +31,33 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
   const { toast } = useToast();
   const [startDate, setStartDate] = React.useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = React.useState<Date | undefined>();
+  const [selectedPatient, setSelectedPatient] = React.useState<string>('');
+  const [treatmentType, setTreatmentType] = React.useState<string>('');
   
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   
   const onSubmit = (data: any) => {
-    // In a real app, this would create a new treatment plan
-    console.log('New treatment plan data:', { ...data, startDate, endDate });
+    if (!selectedPatient || !treatmentType) {
+      toast({
+        title: "Error",
+        description: "Please select a patient and treatment type",
+        variant: "destructive"
+      });
+      return;
+    }
     
+    // In a real app, this would create a new treatment plan
+    console.log('New treatment plan data:', { ...data, startDate, endDate, selectedPatient, treatmentType });
+    
+    const patient = require('@/utils/dummyData').patients.find((p: any) => p.id === selectedPatient);
     toast({
       title: "Treatment plan created",
-      description: `New treatment plan created for ${data.patientName}`,
+      description: `New treatment plan created for ${patient?.name}`,
     });
     
     reset();
+    setSelectedPatient('');
+    setTreatmentType('');
     onOpenChange(false);
   };
 
@@ -59,26 +73,17 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
         
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-6 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="patient">Patient</Label>
-              <Select>
-                <SelectTrigger id="patient">
-                  <SelectValue placeholder="Select a patient" />
-                </SelectTrigger>
-                <SelectContent>
-                  {patients.map((patient) => (
-                    <SelectItem key={patient.id} value={patient.id}>
-                      {patient.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.patient && <p className="text-sm text-red-500">Please select a patient</p>}
-            </div>
+            <PatientSearch 
+              value={selectedPatient}
+              onChange={setSelectedPatient}
+              placeholder="Search for a patient..."
+              label="Patient"
+              id="patient"
+            />
             
             <div className="grid gap-2">
               <Label htmlFor="treatmentType">Treatment Type</Label>
-              <Select>
+              <Select value={treatmentType} onValueChange={setTreatmentType}>
                 <SelectTrigger id="treatmentType">
                   <SelectValue placeholder="Select treatment type" />
                 </SelectTrigger>
@@ -89,7 +94,6 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
                   <SelectItem value="palatal_expander">Palatal Expander</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.treatmentType && <p className="text-sm text-red-500">Please select a treatment type</p>}
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -172,6 +176,8 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
               variant="outline" 
               onClick={() => {
                 reset();
+                setSelectedPatient('');
+                setTreatmentType('');
                 onOpenChange(false);
               }}
             >

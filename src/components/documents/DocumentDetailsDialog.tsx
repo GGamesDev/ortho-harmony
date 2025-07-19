@@ -10,13 +10,13 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Document } from '@/utils/documentData';
 import { patients } from '@/utils/dummyData';
 import { Mail, Download, Printer, X } from 'lucide-react';
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
+import PatientSearch from '@/components/ui/patient-search';
 
 interface DocumentDetailsDialogProps {
   document: Document | null;
@@ -114,27 +114,21 @@ const DocumentDetailsDialog = ({
         </DialogHeader>
         
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="patient" className="text-right">
+          <div className="space-y-4">
+            <PatientSearch 
+              value={selectedPatientId}
+              onChange={setSelectedPatientId}
+              placeholder="Search for a patient to assign..."
+              label="Assign Patient"
+              id="patient"
+            />
+            <Button 
+              onClick={handleAssignPatient}
+              className="w-full"
+              disabled={!selectedPatientId}
+            >
               Assign Patient
-            </Label>
-            <div className="col-span-3">
-              <Select 
-                value={selectedPatientId} 
-                onValueChange={setSelectedPatientId}
-              >
-                <SelectTrigger id="patient">
-                  <SelectValue placeholder="Select a patient" />
-                </SelectTrigger>
-                <SelectContent>
-                  {patients.map(patient => (
-                    <SelectItem key={patient.id} value={patient.id}>
-                      {patient.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            </Button>
           </div>
           
           <div className="border-t border-gray-200 pt-4">

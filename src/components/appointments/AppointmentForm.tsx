@@ -6,11 +6,12 @@ import { patients } from '@/utils/dummyData';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Search } from 'lucide-react';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import PatientSearch from '@/components/ui/patient-search';
 
 interface AppointmentFormProps {
   isOpen: boolean;
@@ -23,13 +24,7 @@ const AppointmentForm = ({ isOpen, onClose }: AppointmentFormProps) => {
   const [startTime, setStartTime] = useState('');
   const [duration, setDuration] = useState(30);
   const [selectedPatient, setSelectedPatient] = useState<string>('');
-  const [patientSearch, setPatientSearch] = useState('');
   const [appointmentType, setAppointmentType] = useState('');
-  
-  const filteredPatients = patients.filter(patient => 
-    patient.name.toLowerCase().includes(patientSearch.toLowerCase()) ||
-    patient.email.toLowerCase().includes(patientSearch.toLowerCase())
-  );
 
   const handleDateChange = (newDate: Date | undefined) => {
     setDate(newDate);
@@ -70,7 +65,6 @@ const AppointmentForm = ({ isOpen, onClose }: AppointmentFormProps) => {
     setDate(new Date());
     setStartTime('');
     setSelectedPatient('');
-    setPatientSearch('');
     setAppointmentType('');
     setDuration(30);
     onClose();
@@ -84,35 +78,13 @@ const AppointmentForm = ({ isOpen, onClose }: AppointmentFormProps) => {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="patient-search">Patient *</Label>
-              <div className="space-y-2">
-                <div className="relative">
-                  <Search className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
-                  <Input
-                    id="patient-search"
-                    placeholder="Search patient by name or email..."
-                    value={patientSearch}
-                    onChange={(e) => setPatientSearch(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                {patientSearch && (
-                  <Select value={selectedPatient} onValueChange={setSelectedPatient}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a patient" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {filteredPatients.map((patient) => (
-                        <SelectItem key={patient.id} value={patient.id}>
-                          {patient.name} - {patient.email}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              </div>
-            </div>
+            <PatientSearch 
+              value={selectedPatient}
+              onChange={setSelectedPatient}
+              placeholder="Search patient by name, email, or phone..."
+              label="Patient *"
+              id="patient-search"
+            />
             
             <div>
               <Label htmlFor="appointment-type">Appointment Type *</Label>

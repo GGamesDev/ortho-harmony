@@ -21,7 +21,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowRight } from 'lucide-react';
-import { patients } from '@/utils/dummyData';
+import PatientSearch from '@/components/ui/patient-search';
 
 export const radiographyTypes = [
   { id: 'panoramic', name: 'Panoramic' },
@@ -59,24 +59,13 @@ const PatientSelectionForm: React.FC<PatientSelectionFormProps> = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="patient">Patient</Label>
-          <Select value={selectedPatient} onValueChange={setSelectedPatient}>
-            <SelectTrigger id="patient">
-              <SelectValue placeholder="Select patient" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Patients</SelectLabel>
-                {patients.map((patient) => (
-                  <SelectItem key={patient.id} value={patient.id}>
-                    {patient.name}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
+        <PatientSearch 
+          value={selectedPatient}
+          onChange={setSelectedPatient}
+          placeholder="Search for a patient..."
+          label="Patient"
+          id="patient"
+        />
         
         <div className="space-y-2">
           <Label htmlFor="type">Radiography Type</Label>
