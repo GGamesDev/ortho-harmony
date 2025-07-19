@@ -40,39 +40,38 @@ interface Radiography {
   notes: string;
 }
 
-// Sample radiography data
 const radiographies: Radiography[] = [
   {
     id: '1',
     patientId: '1',
     date: '2023-06-15',
-    type: 'Panoramic',
+    type: 'Panoramique',
     imageUrl: '/placeholder.svg',
-    notes: 'Full mouth panoramic view showing excellent alignment after treatment.'
+    notes: 'Vue panoramique complète montrant un excellent alignement après traitement.'
   },
   {
     id: '2',
     patientId: '2',
     date: '2023-07-20',
-    type: 'Cephalometric',
+    type: 'Céphalométrique',
     imageUrl: '/placeholder.svg',
-    notes: 'Lateral cephalometric radiograph for orthodontic evaluation.'
+    notes: 'Radiographie céphalométrique latérale pour évaluation orthodontique.'
   },
   {
     id: '3',
     patientId: '3',
     date: '2023-08-05',
-    type: 'Periapical',
+    type: 'Périapicale',
     imageUrl: '/placeholder.svg',
-    notes: 'Periapical radiograph of tooth #30 showing complete root canal filling.'
+    notes: 'Radiographie périapicale de la dent #30 montrant un remplissage complet du canal.'
   },
   {
     id: '4',
     patientId: '1',
     date: '2023-09-12',
-    type: 'Bitewing',
+    type: 'Aile à aile',
     imageUrl: '/placeholder.svg',
-    notes: 'Bitewing radiographs showing no interproximal caries.'
+    notes: 'Radiographies bitewing ne montrant aucune carie interproximale.'
   },
   {
     id: '5',
@@ -80,7 +79,7 @@ const radiographies: Radiography[] = [
     date: '2023-10-18',
     type: 'CBCT',
     imageUrl: '/placeholder.svg',
-    notes: 'Cone beam CT for implant planning in the upper right quadrant.'
+    notes: 'Cone Beam CT pour planification d’implant dans le quadrant supérieur droit.'
   }
 ];
 
@@ -102,7 +101,7 @@ const Radiographies = () => {
 
   const getPatientName = (patientId: string) => {
     const patient = patients.find(p => p.id === patientId);
-    return patient ? patient.name : 'Unknown Patient';
+    return patient ? patient.name : 'Patient inconnu';
   };
 
   const handleLaunchRadiography = () => {
@@ -120,7 +119,7 @@ const Radiographies = () => {
                 <h1 className="text-2xl font-bold text-gray-900">Radiographies</h1>
                 <Button onClick={handleLaunchRadiography}>
                   <Camera className="mr-2 h-4 w-4" />
-                  Launch Radiography
+                  Lancer une radiographie
                 </Button>
               </div>
 
@@ -130,7 +129,7 @@ const Radiographies = () => {
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
                     <Input
                       type="search"
-                      placeholder="Search radiographies by type or patient name..."
+                      placeholder="Rechercher par type ou nom du patient..."
                       className="pl-8"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
@@ -141,9 +140,9 @@ const Radiographies = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Radiography Records</CardTitle>
+                  <CardTitle>Dossiers radiographiques</CardTitle>
                   <CardDescription>
-                    Browse and manage patient radiographic images
+                    Parcourez et gérez les images radiographiques des patients
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -171,7 +170,7 @@ const Radiographies = () => {
                                 size="sm"
                                 onClick={() => handleViewImage(rad)}
                               >
-                                View
+                                Voir
                               </Button>
                             </TableCell>
                           </TableRow>
@@ -179,7 +178,7 @@ const Radiographies = () => {
                       ) : (
                         <TableRow>
                           <TableCell colSpan={5} className="h-24 text-center">
-                            No radiographies found
+                            Aucune radiographie trouvée
                           </TableCell>
                         </TableRow>
                       )}
@@ -196,16 +195,16 @@ const Radiographies = () => {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>
-              {selectedImage?.type} Radiography - {getPatientName(selectedImage?.patientId || '')}
+              Radiographie {selectedImage?.type} - {getPatientName(selectedImage?.patientId || '')}
             </DialogTitle>
             <DialogDescription>
-              Taken on {selectedImage?.date}
+              Prise le {selectedImage?.date}
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col items-center">
             <img
               src={selectedImage?.imageUrl}
-              alt={`${selectedImage?.type} radiography`}
+              alt={`Radiographie ${selectedImage?.type}`}
               className="w-full h-64 object-contain bg-gray-100 rounded-md"
             />
             <p className="mt-4 text-sm text-gray-700">{selectedImage?.notes}</p>
@@ -213,17 +212,17 @@ const Radiographies = () => {
           <DialogFooter className="sm:justify-between">
             <div className="flex gap-2">
               <Button variant="outline" size="sm">
-                Download
+                Télécharger
               </Button>
               <Button variant="outline" size="sm">
-                Print
+                Imprimer
               </Button>
               <Button variant="outline" size="sm">
-                Share
+                Partager
               </Button>
             </div>
             <Button variant="default" onClick={() => setIsViewDialogOpen(false)}>
-              Close
+              Fermer
             </Button>
           </DialogFooter>
         </DialogContent>
