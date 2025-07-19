@@ -3,17 +3,24 @@ import React from 'react';
 import { Patient } from '@/utils/dummyData';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 interface TreatmentProgressProps {
   patients: Patient[];
 }
 
 const TreatmentProgress = ({ patients }: TreatmentProgressProps) => {
+  const navigate = useNavigate();
+  
+  const handleViewAll = () => {
+    navigate('/treatments');
+  };
+
   return (
     <div className="ortho-card">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">Treatment Progress</h2>
-        <Button variant="outline" size="sm">View All</Button>
+        <Button variant="outline" size="sm" onClick={handleViewAll}>View All</Button>
       </div>
       
       <div className="space-y-6">

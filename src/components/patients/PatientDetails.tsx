@@ -10,6 +10,7 @@ import { Patient } from '@/utils/dummyData';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Calendar, Phone, Mail, Clock, Clipboard } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface PatientDetailsProps {
   patient: Patient;
@@ -18,6 +19,16 @@ interface PatientDetailsProps {
 }
 
 const PatientDetails = ({ patient, isOpen, onClose }: PatientDetailsProps) => {
+  const { toast } = useToast();
+  
+  const handleEditPatient = () => {
+    toast({
+      title: "Edit Patient",
+      description: `Opening edit form for ${patient.name}`,
+    });
+    // In a real app, this would open an edit form or navigate to edit page
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl">
@@ -97,7 +108,7 @@ const PatientDetails = ({ patient, isOpen, onClose }: PatientDetailsProps) => {
         
         <div className="flex justify-end space-x-3 mt-6">
           <Button variant="outline" onClick={onClose}>Close</Button>
-          <Button>Edit Patient</Button>
+          <Button onClick={handleEditPatient}>Edit Patient</Button>
         </div>
       </DialogContent>
     </Dialog>

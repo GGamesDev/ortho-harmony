@@ -5,6 +5,7 @@ import { Clock, Calendar, Edit, Trash2, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AppointmentForm from '@/components/appointments/AppointmentForm';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 interface AppointmentListProps {
   appointments: Appointment[];
@@ -12,13 +13,27 @@ interface AppointmentListProps {
 
 const AppointmentList = ({ appointments }: AppointmentListProps) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleDeleteAppointment = (id: string) => {
     toast({
       title: "Appointment deleted",
       description: "The appointment has been deleted successfully.",
     });
+  };
+
+  const handleEditAppointment = (appointment: Appointment) => {
+    setEditingAppointment(appointment);
+    toast({
+      title: "Edit functionality",
+      description: `Opening edit form for appointment with ${appointment.patientName}`,
+    });
+  };
+
+  const handleViewAllAppointments = () => {
+    navigate('/appointments');
   };
 
   return (
@@ -29,9 +44,14 @@ const AppointmentList = ({ appointments }: AppointmentListProps) => {
            appointments.length === 1 ? "1 Appointment" : 
            `${appointments.length} Appointments`}
         </h2>
-        <Button onClick={() => setIsFormOpen(true)} size="sm">
-          <Plus className="mr-1 h-4 w-4" /> New Appointment
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={handleViewAllAppointments}>
+            View All
+          </Button>
+          <Button onClick={() => setIsFormOpen(true)} size="sm">
+            <Plus className="mr-1 h-4 w-4" /> New Appointment
+          </Button>
+        </div>
       </div>
       
       <div className="space-y-4">
@@ -58,7 +78,7 @@ const AppointmentList = ({ appointments }: AppointmentListProps) => {
                 </div>
               </div>
               <div className="flex space-x-2 mt-4 md:mt-0">
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" onClick={() => handleEditAppointment(appointment)}>
                   <Edit className="h-4 w-4" />
                 </Button>
                 <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDeleteAppointment(appointment.id)}>
