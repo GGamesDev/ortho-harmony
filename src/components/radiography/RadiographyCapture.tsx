@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Card,
@@ -33,9 +32,9 @@ const RadiographyCapture: React.FC<RadiographyCaptureProps> = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Capture Radiography</CardTitle>
+        <CardTitle>Capture de radiographie</CardTitle>
         <CardDescription>
-          Position the equipment and capture the image
+          Positionnez l’équipement et capturez l’image
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -45,14 +44,14 @@ const RadiographyCapture: React.FC<RadiographyCaptureProps> = ({
               <div className="animate-pulse mb-4">
                 <Camera className="h-16 w-16 text-ortho-primary mx-auto" />
               </div>
-              <p className="text-lg font-medium text-gray-700">Capturing in progress...</p>
-              <p className="text-sm text-gray-500">Please wait while the image is being captured</p>
+              <p className="text-lg font-medium text-gray-700">Capture en cours...</p>
+              <p className="text-sm text-gray-500">Veuillez patienter pendant la capture de l’image</p>
             </div>
           ) : (
             <div className="text-center">
               <Camera className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-lg font-medium text-gray-700">Ready to capture</p>
-              <p className="text-sm text-gray-500">Make sure the patient is positioned correctly</p>
+              <p className="text-lg font-medium text-gray-700">Prêt à capturer</p>
+              <p className="text-sm text-gray-500">Assurez-vous que le patient est bien positionné</p>
             </div>
           )}
         </div>
@@ -60,11 +59,11 @@ const RadiographyCapture: React.FC<RadiographyCaptureProps> = ({
         <div className="mt-4">
           <dl className="divide-y divide-gray-200">
             <div className="py-2 flex justify-between">
-              <dt className="text-sm font-medium text-gray-500">Patient:</dt>
+              <dt className="text-sm font-medium text-gray-500">Patient :</dt>
               <dd className="text-sm text-gray-900">{patients.find(p => p.id === selectedPatient)?.name}</dd>
             </div>
             <div className="py-2 flex justify-between">
-              <dt className="text-sm font-medium text-gray-500">Type:</dt>
+              <dt className="text-sm font-medium text-gray-500">Type :</dt>
               <dd className="text-sm text-gray-900">
                 {radiographyTypes.find(t => t.id === radiographyType)?.name}
               </dd>
@@ -74,14 +73,14 @@ const RadiographyCapture: React.FC<RadiographyCaptureProps> = ({
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="outline" onClick={onBack}>
-          Back
+          Retour
         </Button>
         {isCapturing ? (
           <Button 
             variant="default"
             onClick={onCaptureComplete}
           >
-            Complete
+            Terminer
           </Button>
         ) : (
           <Button 
@@ -89,7 +88,7 @@ const RadiographyCapture: React.FC<RadiographyCaptureProps> = ({
             onClick={onStartCapture}
           >
             <Camera className="mr-2 h-4 w-4" />
-            Start Capture
+            Démarrer la capture
           </Button>
         )}
       </CardFooter>
