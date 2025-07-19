@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from '@/components/layout/AppSidebar';
@@ -18,7 +17,7 @@ const Settings = () => {
           <AppSidebar activePage="settings" />
           <main className="flex-1 p-6 overflow-y-auto">
             <div className="max-w-5xl mx-auto">
-              <h1 className="text-2xl font-bold text-gray-900 mb-6">Settings</h1>
+              <h1 className="text-2xl font-bold text-gray-900 mb-6">Paramètres</h1>
               
               <div className="bg-white rounded-lg shadow p-6">
                 <Tabs 
@@ -28,7 +27,7 @@ const Settings = () => {
                   className="w-full"
                 >
                   <TabsList className="mb-6 bg-gray-100">
-                    <TabsTrigger value="email">Email</TabsTrigger>
+                    <TabsTrigger value="email">E-mail</TabsTrigger>
                     <TabsTrigger value="contacts">Contacts</TabsTrigger>
                   </TabsList>
                   <TabsContent value="email">
