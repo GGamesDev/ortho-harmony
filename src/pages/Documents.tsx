@@ -74,7 +74,7 @@ const Documents = () => {
     return sortOrder === 'oldest' ? dateA - dateB : dateB - dateA;
   });
   
-  const categories = ['Consent', 'Treatment', 'Medical', 'Financial', 'Other'];
+  const categories = ['Consentement', 'Traitement', 'Médical', 'Financier', 'Autre'];
   
   return (
     <div className="min-h-screen bg-gray-50">
@@ -87,12 +87,12 @@ const Documents = () => {
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                 <div>
                   <h1 className="text-2xl font-bold text-gray-800">Documents</h1>
-                  <p className="text-gray-600">Manage and share patient documents</p>
+                  <p className="text-gray-600">Gérez et partagez les documents des patients</p>
                 </div>
                 
                 <Button className="bg-ortho-primary hover:bg-ortho-primary/90">
                   <FilePlus className="mr-2 h-4 w-4" />
-                  Add New Document
+                  Ajouter un document
                 </Button>
               </div>
               
@@ -100,7 +100,7 @@ const Documents = () => {
                 <div className="relative flex-1">
                   <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
-                    placeholder="Search documents by title or description..."
+                    placeholder="Rechercher un document par titre ou description..."
                     className="pl-10"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -112,7 +112,7 @@ const Documents = () => {
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="flex items-center gap-2">
                         <Filter className="h-4 w-4" />
-                        <span>Filter</span>
+                        <span>Filtrer</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
@@ -132,11 +132,11 @@ const Documents = () => {
                   
                   <Select value={sortOrder} onValueChange={setSortOrder}>
                     <SelectTrigger className="w-[160px]">
-                      <SelectValue placeholder="Sort by" />
+                      <SelectValue placeholder="Trier par" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="newest">Newest first</SelectItem>
-                      <SelectItem value="oldest">Oldest first</SelectItem>
+                      <SelectItem value="newest">Plus récents</SelectItem>
+                      <SelectItem value="oldest">Plus anciens</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -145,16 +145,16 @@ const Documents = () => {
               {sortedDocuments.length === 0 ? (
                 <div className="text-center py-12 bg-white rounded-lg border">
                   <FileText className="mx-auto h-12 w-12 text-gray-300" />
-                  <h3 className="mt-2 text-lg font-medium text-gray-900">No documents found</h3>
+                  <h3 className="mt-2 text-lg font-medium text-gray-900">Aucun document trouvé</h3>
                   <p className="mt-1 text-gray-500">
                     {searchQuery || categoryFilter ? 
-                      'Try adjusting your search or filter criteria.' : 
-                      'Get started by adding a new document.'}
+                      'Essayez de modifier vos critères de recherche ou de filtre.' : 
+                      'Commencez par ajouter un nouveau document.'}
                   </p>
                   <div className="mt-6">
                     <Button>
                       <FilePlus className="mr-2 h-4 w-4" />
-                      Add New Document
+                      Ajouter un document
                     </Button>
                   </div>
                 </div>
