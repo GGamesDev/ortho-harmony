@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -17,11 +16,11 @@ const StartRadiography = () => {
   
   const handleStartCapture = () => {
     setIsCapturing(true);
-    // In a real app, this would activate camera/sensors
+    // Dans une vraie application, cela activerait la caméra/les capteurs
   };
   
   const handleCaptureComplete = () => {
-    // In a real app, this would save the radiography
+    // Dans une vraie application, cela enregistrerait la radiographie
     navigate('/radiographies');
   };
   
@@ -46,10 +45,10 @@ const StartRadiography = () => {
             <div className="max-w-3xl mx-auto">
               <div className="flex items-center mb-6">
                 <Button variant="ghost" onClick={handleBack} className="mr-4">
-                  Back
+                  Retour
                 </Button>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  {currentStep === 1 ? 'Start New Radiography' : 'Capture Radiography'}
+                  {currentStep === 1 ? 'Démarrer une nouvelle radiographie' : 'Capturer la radiographie'}
                 </h1>
               </div>
               
