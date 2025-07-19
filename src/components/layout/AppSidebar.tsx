@@ -1,15 +1,18 @@
-import { 
-  Home, 
-  Users, 
-  Calendar, 
-  ClipboardList, 
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  Home,
+  Users,
+  Calendar,
+  ClipboardList,
   Settings,
   FileText,
-  FileImage
-} from 'lucide-react';
-import { cn } from "@/lib/utils";
+  FileImage,
+  Menu,
+} from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from 'react-router-dom';
+import { cn } from "@/lib/utils"; // Remplace ceci par clsx ou classnames si tu veux
+
 import {
   Sidebar,
   SidebarContent,
