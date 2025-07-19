@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from '@/components/layout/AppSidebar';
@@ -14,7 +13,7 @@ const Treatments = () => {
           <AppSidebar activePage="treatments" />
           <main className="flex-1 p-6 overflow-y-auto">
             <div className="max-w-7xl mx-auto">
-              <h1 className="text-2xl font-bold text-gray-900 mb-6">Treatment Plans</h1>
+              <h1 className="text-2xl font-bold text-gray-900 mb-6">Plans de traitement</h1>
               <TreatmentsList />
             </div>
           </main>
