@@ -10,8 +10,7 @@ import {
   FileImage,
   Menu,
 } from "lucide-react";
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils"; // Remplace ceci par clsx ou classnames si tu veux
+import { cn } from "@/lib/utils"; // Ou clsx/classnames selon ce que tu utilises
 
 import {
   Sidebar,
@@ -72,10 +71,11 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
   ];
 
   return (
-    <motion.div
-      animate={{ width: isOpen ? 260 : 80 }}
-      transition={{ duration: 0.3 }}
-      className="bg-white border-r shadow-md min-h-screen flex flex-col justify-between overflow-hidden"
+    <Sidebar
+      className={cn(
+        "bg-white border-r shadow-md min-h-screen flex flex-col justify-between transition-all",
+        isOpen ? "w-64" : "w-20"
+      )}
     >
       <SidebarHeader className="flex items-center justify-between px-4 py-3 border-b">
         {isOpen && (
@@ -104,7 +104,7 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
                 isActive={item.active}
                 tooltip={item.title}
                 className={cn(
-                  "group flex items-center gap-3 px-4 py-2 rounded-xl transition-all hover:bg-ortho-light/70 text-sm font-medium",
+                  "group flex items-center gap-3 px-4 py-2 rounded-xl transition-colors hover:bg-ortho-light/70 text-sm font-medium",
                   item.active
                     ? "bg-ortho-primary text-white shadow"
                     : "text-gray-700 hover:text-ortho-primary"
@@ -120,9 +120,7 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
                     )}
                   />
                   {isOpen && (
-                    <span className="whitespace-nowrap transition-opacity duration-300">
-                      {item.title}
-                    </span>
+                    <span className="whitespace-nowrap">{item.title}</span>
                   )}
                 </Link>
               </SidebarMenuButton>
@@ -144,7 +142,7 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
               isActive={activePage === "settings"}
               tooltip="Paramètres"
               className={cn(
-                "group flex items-center gap-3 px-4 py-2 rounded-xl transition-all hover:bg-ortho-light/70 text-sm font-medium",
+                "group flex items-center gap-3 px-4 py-2 rounded-xl transition-colors hover:bg-ortho-light/70 text-sm font-medium",
                 activePage === "settings"
                   ? "bg-ortho-primary text-white shadow"
                   : "text-gray-700 hover:text-ortho-primary"
@@ -152,16 +150,12 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
             >
               <Link to="/settings">
                 <Settings className="h-5 w-5" />
-                {isOpen && (
-                  <span className="whitespace-nowrap transition-opacity duration-300">
-                    Paramètres
-                  </span>
-                )}
+                {isOpen && <span className="whitespace-nowrap">Paramètres</span>}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
-    </motion.div>
+    </Sidebar>
   );
 }
