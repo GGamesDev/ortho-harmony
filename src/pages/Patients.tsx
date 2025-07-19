@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from '@/components/layout/AppSidebar';
@@ -7,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const Patients = () => {
   const { toast } = useToast();
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <SidebarProvider>
