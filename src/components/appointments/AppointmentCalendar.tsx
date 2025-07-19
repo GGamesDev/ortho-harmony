@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { patients, appointments } from '@/utils/dummyData';
@@ -21,17 +20,17 @@ const AppointmentCalendar = () => {
       />
       {date ? (
         <p className="mt-4">
-          {format(date, 'PPP')}
+          {format(date, 'PPP', { locale: undefined /* Remplace par fr si tu importes locale */ })}
         </p>
       ) : (
         <p className="mt-4">
-          Please select a date.
+          Veuillez sélectionner une date.
         </p>
       )}
 
       {dayAppointments.length > 0 ? (
         <div className="mt-4">
-          <h3 className="text-lg font-semibold">Appointments for {format(date || new Date(), 'PPP')}:</h3>
+          <h3 className="text-lg font-semibold">Rendez-vous pour le {format(date || new Date(), 'PPP', { locale: undefined })} :</h3>
           <ul>
             {dayAppointments.map(appointment => (
               <li key={appointment.id} className="py-2">
@@ -42,7 +41,7 @@ const AppointmentCalendar = () => {
         </div>
       ) : (
         <div className="mt-4">
-          <p>No appointments for this day.</p>
+          <p>Pas de rendez-vous pour cette journée.</p>
         </div>
       )}
     </div>
