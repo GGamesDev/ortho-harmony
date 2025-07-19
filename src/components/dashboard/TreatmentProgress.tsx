@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Patient } from '@/utils/dummyData';
 import { Progress } from '@/components/ui/progress';
@@ -19,8 +18,8 @@ const TreatmentProgress = ({ patients }: TreatmentProgressProps) => {
   return (
     <div className="ortho-card">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold">Treatment Progress</h2>
-        <Button variant="outline" size="sm" onClick={handleViewAll}>View All</Button>
+        <h2 className="text-xl font-semibold">Progression du traitement</h2>
+        <Button variant="outline" size="sm" onClick={handleViewAll}>Voir tout</Button>
       </div>
       
       <div className="space-y-6">
