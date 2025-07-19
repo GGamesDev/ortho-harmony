@@ -1,4 +1,15 @@
-// ... les imports restent inchangés
+import React, { useState } from 'react';
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from '@/components/layout/AppSidebar';
+import AppointmentCalendar from '@/components/appointments/AppointmentCalendar';
+import { appointments } from '@/utils/dummyData';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Plus, Clock, Calendar as CalendarIcon, ChevronLeft, ChevronRight, Edit, Trash2 } from 'lucide-react';
+import { format, addDays, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay, parseISO } from 'date-fns';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import AppointmentForm from '@/components/appointments/AppointmentForm';
+import { useToast } from '@/hooks/use-toast';
 
 const Appointments = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
