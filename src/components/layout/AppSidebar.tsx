@@ -10,7 +10,7 @@ import {
   FileImage,
   Menu,
 } from "lucide-react";
-import { cn } from "@/lib/utils"; // Ou clsx/classnames selon ce que tu utilises
+import { cn } from "@/lib/utils"; // ou clsx/classnames selon ton setup
 
 import {
   Sidebar,
@@ -77,16 +77,18 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
         isOpen ? "w-64" : "w-20"
       )}
     >
-      <SidebarHeader className="flex items-center justify-between px-4 py-3 border-b">
-        {isOpen && (
-          <h2 className="text-xl font-bold text-ortho-primary">OrthoBE</h2>
-        )}
-        <button
-          onClick={toggleSidebar}
-          className="p-1 text-ortho-primary hover:text-ortho-dark"
-        >
-          <Menu className="w-6 h-6" />
-        </button>
+      <SidebarHeader className="px-4 py-3 border-b">
+        <div className="flex items-center justify-between">
+          {isOpen && (
+            <h2 className="text-xl font-bold text-ortho-primary">OrthoBE</h2>
+          )}
+          <button
+            onClick={toggleSidebar}
+            className="p-1 text-ortho-primary hover:text-ortho-dark ml-auto"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
       </SidebarHeader>
 
       <SidebarContent className="flex-1 px-2">
@@ -113,7 +115,7 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
                 <Link to={item.href}>
                   <item.icon
                     className={cn(
-                      "h-5 w-5",
+                      isOpen ? "h-5 w-5" : "h-6 w-6",
                       item.active
                         ? "text-white"
                         : "text-ortho-primary group-hover:text-ortho-primary"
@@ -149,8 +151,17 @@ export function AppSidebar({ activePage }: AppSidebarProps) {
               )}
             >
               <Link to="/settings">
-                <Settings className="h-5 w-5" />
-                {isOpen && <span className="whitespace-nowrap">Paramètres</span>}
+                <Settings
+                  className={cn(
+                    isOpen ? "h-5 w-5" : "h-6 w-6",
+                    activePage === "settings"
+                      ? "text-white"
+                      : "text-ortho-primary group-hover:text-ortho-primary"
+                  )}
+                />
+                {isOpen && (
+                  <span className="whitespace-nowrap">Paramètres</span>
+                )}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
