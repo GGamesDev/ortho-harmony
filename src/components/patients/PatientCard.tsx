@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Patient } from '@/utils/dummyData';
 import { Calendar, Phone, Mail } from 'lucide-react';
@@ -23,7 +22,7 @@ const PatientCard = ({ patient }: PatientCardProps) => {
           <div>
             <h3 className="font-medium">{patient.name}</h3>
             <p className="text-sm text-gray-600">
-              {patient.age} years • {patient.gender}
+              {patient.age} ans • {patient.gender === 'male' ? 'Homme' : patient.gender === 'female' ? 'Femme' : patient.gender}
             </p>
           </div>
         </div>
@@ -39,13 +38,13 @@ const PatientCard = ({ patient }: PatientCardProps) => {
           </div>
           <div className="flex items-center space-x-2">
             <Calendar className="h-4 w-4 text-gray-500" />
-            <span>Next: {new Date(patient.nextAppointment).toLocaleDateString()}</span>
+            <span>Prochain rendez-vous : {new Date(patient.nextAppointment).toLocaleDateString('fr-FR')}</span>
           </div>
         </div>
         
         <div className="mt-4 pt-4 border-t">
           <div className="flex justify-between mb-1">
-            <span className="text-sm font-medium">Treatment Progress</span>
+            <span className="text-sm font-medium">Progression du traitement</span>
             <span className="text-sm">{patient.treatmentProgress}%</span>
           </div>
           <Progress value={patient.treatmentProgress} className="h-2" />
@@ -59,7 +58,7 @@ const PatientCard = ({ patient }: PatientCardProps) => {
             className="w-full"
             onClick={() => setIsDetailModalOpen(true)}
           >
-            View Record
+            Voir le dossier
           </Button>
         </div>
       </div>
