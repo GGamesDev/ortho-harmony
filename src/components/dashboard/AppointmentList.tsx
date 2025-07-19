@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Appointment } from '@/utils/dummyData';
 import { Clock, Calendar, Edit, Trash2, Plus } from 'lucide-react';
@@ -19,16 +18,16 @@ const AppointmentList = ({ appointments }: AppointmentListProps) => {
 
   const handleDeleteAppointment = (id: string) => {
     toast({
-      title: "Appointment deleted",
-      description: "The appointment has been deleted successfully.",
+      title: "Rendez-vous supprimé",
+      description: "Le rendez-vous a été supprimé avec succès.",
     });
   };
 
   const handleEditAppointment = (appointment: Appointment) => {
     setEditingAppointment(appointment);
     toast({
-      title: "Edit functionality",
-      description: `Opening edit form for appointment with ${appointment.patientName}`,
+      title: "Fonction d'édition",
+      description: `Ouverture du formulaire d'édition pour le rendez-vous avec ${appointment.patientName}`,
     });
   };
 
@@ -40,16 +39,16 @@ const AppointmentList = ({ appointments }: AppointmentListProps) => {
     <div className="ortho-card">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">
-          {appointments.length === 0 ? "No Appointments" : 
-           appointments.length === 1 ? "1 Appointment" : 
-           `${appointments.length} Appointments`}
+          {appointments.length === 0 ? "Aucun rendez-vous" : 
+           appointments.length === 1 ? "1 rendez-vous" : 
+           `${appointments.length} rendez-vous`}
         </h2>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={handleViewAllAppointments}>
-            View All
+            Voir tout
           </Button>
           <Button onClick={() => setIsFormOpen(true)} size="sm">
-            <Plus className="mr-1 h-4 w-4" /> New Appointment
+            <Plus className="mr-1 h-4 w-4" /> Nouveau rendez-vous
           </Button>
         </div>
       </div>
@@ -67,7 +66,7 @@ const AppointmentList = ({ appointments }: AppointmentListProps) => {
                   <div className="flex items-center mt-1 text-sm text-gray-600">
                     <Clock className="h-3.5 w-3.5 mr-1" />
                     <span>
-                      {appointment.date} at {appointment.time} ({appointment.duration} min)
+                      {appointment.date} à {appointment.time} ({appointment.duration} min)
                     </span>
                   </div>
                   <div className="mt-1">
@@ -89,7 +88,7 @@ const AppointmentList = ({ appointments }: AppointmentListProps) => {
           ))
         ) : (
           <div className="text-center py-8 text-gray-500">
-            No appointments found for the selected date.
+            Aucun rendez-vous trouvé pour la date sélectionnée.
           </div>
         )}
       </div>
