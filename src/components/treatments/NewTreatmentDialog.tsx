@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -39,20 +38,20 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
   const onSubmit = (data: any) => {
     if (!selectedPatient || !treatmentType) {
       toast({
-        title: "Error",
-        description: "Please select a patient and treatment type",
+        title: "Erreur",
+        description: "Veuillez sélectionner un patient et un type de traitement",
         variant: "destructive"
       });
       return;
     }
     
-    // In a real app, this would create a new treatment plan
-    console.log('New treatment plan data:', { ...data, startDate, endDate, selectedPatient, treatmentType });
+    // Dans une vraie application, ceci créerait un nouveau plan de traitement
+    console.log('Données du nouveau plan de traitement :', { ...data, startDate, endDate, selectedPatient, treatmentType });
     
     const patient = require('@/utils/dummyData').patients.find((p: any) => p.id === selectedPatient);
     toast({
-      title: "Treatment plan created",
-      description: `New treatment plan created for ${patient?.name}`,
+      title: "Plan de traitement créé",
+      description: `Nouveau plan de traitement créé pour ${patient?.name}`,
     });
     
     reset();
@@ -65,9 +64,9 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Create New Treatment Plan</DialogTitle>
+          <DialogTitle>Créer un nouveau plan de traitement</DialogTitle>
           <DialogDescription>
-            Create a new treatment plan for a patient
+            Créez un nouveau plan de traitement pour un patient
           </DialogDescription>
         </DialogHeader>
         
@@ -76,29 +75,29 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
             <PatientSearch 
               value={selectedPatient}
               onChange={setSelectedPatient}
-              placeholder="Search for a patient..."
+              placeholder="Rechercher un patient..."
               label="Patient"
               id="patient"
             />
             
             <div className="grid gap-2">
-              <Label htmlFor="treatmentType">Treatment Type</Label>
+              <Label htmlFor="treatmentType">Type de traitement</Label>
               <Select value={treatmentType} onValueChange={setTreatmentType}>
                 <SelectTrigger id="treatmentType">
-                  <SelectValue placeholder="Select treatment type" />
+                  <SelectValue placeholder="Sélectionner un type de traitement" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="braces">Braces</SelectItem>
+                  <SelectItem value="braces">Appareil dentaire</SelectItem>
                   <SelectItem value="invisalign">Invisalign</SelectItem>
-                  <SelectItem value="retainer">Retainer</SelectItem>
-                  <SelectItem value="palatal_expander">Palatal Expander</SelectItem>
+                  <SelectItem value="retainer">Contention</SelectItem>
+                  <SelectItem value="palatal_expander">Disjoncteur palatin</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="startDate">Start Date</Label>
+                <Label htmlFor="startDate">Date de début</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -109,7 +108,7 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {startDate ? format(startDate, "PPP") : "Select date"}
+                      {startDate ? format(startDate, "PPP") : "Sélectionner une date"}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
@@ -123,7 +122,7 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
               </div>
               
               <div className="flex flex-col gap-2">
-                <Label htmlFor="endDate">Estimated End Date</Label>
+                <Label htmlFor="endDate">Date de fin estimée</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -134,7 +133,7 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {endDate ? format(endDate, "PPP") : "Select date"}
+                      {endDate ? format(endDate, "PPP") : "Sélectionner une date"}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
@@ -150,21 +149,21 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
             </div>
             
             <div className="grid gap-2">
-              <Label htmlFor="duration">Duration (months)</Label>
+              <Label htmlFor="duration">Durée (mois)</Label>
               <Input
                 id="duration"
                 type="number"
                 min="1"
                 {...register("duration", { required: true })}
               />
-              {errors.duration && <p className="text-sm text-red-500">Please enter a duration</p>}
+              {errors.duration && <p className="text-sm text-red-500">Veuillez indiquer une durée</p>}
             </div>
             
             <div className="grid gap-2">
-              <Label htmlFor="notes">Notes</Label>
+              <Label htmlFor="notes">Remarques</Label>
               <Textarea
                 id="notes"
-                placeholder="Add any additional notes..."
+                placeholder="Ajouter des remarques supplémentaires..."
                 {...register("notes")}
               />
             </div>
@@ -181,10 +180,10 @@ const NewTreatmentDialog = ({ open, onOpenChange }: NewTreatmentDialogProps) => 
                 onOpenChange(false);
               }}
             >
-              Cancel
+              Annuler
             </Button>
             <Button type="submit" className="bg-ortho-primary hover:bg-ortho-primary/90">
-              Create Treatment Plan
+              Créer le plan
             </Button>
           </DialogFooter>
         </form>
